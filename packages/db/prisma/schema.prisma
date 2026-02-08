@@ -1,0 +1,176 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  directUrl  = env("DIRECT_URL")
+  extensions = [uuid_ossp(map: "uuid-ossp", schema: "extensions"), vector]
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String             @id @default(cuid())
+  name          String?
+  email         String?            @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+  organizations UserOrganization[]
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Organization {
+  id               String             @id @default(cuid())
+  name             String
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  stripeCustomerId String?            @unique
+  subscriptionId   String?
+  plan             Plan               @default(STARTER)
+  projects         Project[]
+  users            UserOrganization[]
+}
+
+model UserOrganization {
+  id             String       @id @default(cuid())
+  userId         String
+  organizationId String
+  role           Role         @default(MEMBER)
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  user           User         @relation(fields: [userId], references: [id])
+
+  @@unique([userId, organizationId])
+}
+
+model Project {
+  id             String            @id @default(cuid())
+  name           String
+  organizationId String
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+  sources        DataSource[]
+  organization   Organization      @relation(fields: [organizationId], references: [id])
+  analyses       ProjectAnalysis[]
+  items          ReviewItem[]
+  syncInProgress Boolean           @default(false)
+  syncStartedAt  DateTime?
+}
+
+model DataSource {
+  id        String       @id @default(cuid())
+  projectId String
+  platform  Platform
+  config    Json
+  status    SourceStatus @default(IDLE)
+  lastSync  DateTime?
+  project   Project      @relation(fields: [projectId], references: [id])
+}
+
+model ReviewItem {
+  id         String                 @id @default(cuid())
+  projectId  String
+  platform   Platform
+  externalId String?
+  url        String?
+  rating     Int?
+  sentiment  Sentiment?
+  text       String
+  author     String?
+  createdAt  DateTime               @default(now())
+  fetchedAt  DateTime               @default(now())
+  language   String?
+  metadata   Json?
+  embedding  Unsupported("vector")?
+  project    Project                @relation(fields: [projectId], references: [id])
+
+  @@unique([platform, externalId, projectId])
+  @@index([projectId, createdAt])
+  @@index([projectId, platform])
+  @@index([projectId, rating])
+}
+
+model ProjectAnalysis {
+  id          String   @id @default(cuid())
+  projectId   String
+  periodStart DateTime
+  periodEnd   DateTime
+  createdAt   DateTime @default(now())
+  json        Json
+  project     Project  @relation(fields: [projectId], references: [id])
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  orgId     String
+  userId    String
+  action    String
+  metadata  Json?
+  createdAt DateTime @default(now())
+}
+
+enum Plan {
+  STARTER
+  PRO
+}
+
+enum Role {
+  OWNER
+  ADMIN
+  MEMBER
+}
+
+enum Platform {
+  GOOGLE_PLAY
+  INSTAGRAM
+  X
+  CSV
+  APP_STORE
+}
+
+enum SourceStatus {
+  IDLE
+  SYNCING
+  ERROR
+}
+
+enum Sentiment {
+  POS
+  NEU
+  NEG
+}

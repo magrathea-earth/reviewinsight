@@ -1,0 +1,12 @@
+
+node_modules
+.next
+.env
+dist
+build
+*.log
+.DS_Store
+test-output.json
+test-output-*.json
+coverage
+.turbo

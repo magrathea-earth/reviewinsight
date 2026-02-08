@@ -163,7 +163,7 @@ export default function LandingPage() {
 
                             <div className="space-y-6">
                                 {[
-                                    { title: "Universal Sync", desc: "One dashboard for App Store, Google Play, Instagram, and X." },
+                                    { title: "Universal Sync", desc: "One dashboard for App Store and Google Play reviews (Social integrations coming soon)." },
                                     { title: "Sentiment Mapping", desc: "Visualize mood trends over time with surgical precision." },
                                     { title: "AI-Driven Top 3 Fixes", desc: "Get daily recommendations on what to fix first for maximum impact." }
                                 ].map((feature, i) => (

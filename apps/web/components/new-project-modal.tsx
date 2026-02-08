@@ -33,6 +33,7 @@ export function NewProjectModal({ isOpen, onClose, onCreate }: NewProjectModalPr
             ),
             color: "bg-green-500"
         },
+        /*
         {
             id: "instagram",
             name: "Instagram",
@@ -55,6 +56,7 @@ export function NewProjectModal({ isOpen, onClose, onCreate }: NewProjectModalPr
             ),
             color: "bg-slate-900"
         },
+        */
         {
             id: "apple",
             name: "App Store",
@@ -158,14 +160,18 @@ export function NewProjectModal({ isOpen, onClose, onCreate }: NewProjectModalPr
                                             </div>
                                             <h3 className="text-lg font-bold">Connect your platform</h3>
                                             <p className="text-sm text-muted-foreground max-w-[300px] mx-auto">
-                                                Enter the App Store ID or Post URL you want ReviewInsight to monitor.
+                                                Enter the account handle or profile URL you want ReviewInsight to monitor.
                                             </p>
                                         </div>
 
                                         <div className="space-y-4">
                                             <input
                                                 type="text"
-                                                placeholder={platform === 'google' ? "com.example.app" : platform === 'apple' ? "83485435" : "https://..."}
+                                                placeholder={
+                                                    platform === 'google' ? "com.example.app" :
+                                                        platform === 'apple' ? "83485435" :
+                                                            "https://..."
+                                                }
                                                 value={configValue}
                                                 onChange={(e) => setConfigValue(e.target.value)}
                                                 className="w-full bg-accent/30 border-transparent rounded-2xl px-5 py-3.5 text-sm focus:bg-background focus:border-primary transition-all outline-none"

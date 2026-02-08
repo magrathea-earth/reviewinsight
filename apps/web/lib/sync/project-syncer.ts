@@ -2,9 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import {
     GooglePlayAdapter,
-    AppStoreAdapter,
-    InstagramAdapter,
-    XAdapter
+    AppStoreAdapter
 } from "./adapters";
 import type { ReviewItem } from "@repo/shared";
 
@@ -25,22 +23,72 @@ export class ProjectSyncer {
     }
 
     async run(projectId: string) {
-        console.log(`[ProjectSyncer] Starting sync for project ${projectId}`);
+        console.log(`[ProjectSyncer] Starting sync request for project ${projectId}`);
 
+        // 1. Atomic Lock Attempt: Try to set syncInProgress=true ONLY if currently false
+        const lockResult = await prisma.project.updateMany({
+            where: {
+                id: projectId,
+                syncInProgress: false
+            },
+            data: {
+                syncInProgress: true,
+                syncStartedAt: new Date()
+            }
+        });
+
+        // 2. Handle Lock Failure (Already in progress?)
+        if (lockResult.count === 0) {
+            // Fetch to check if it's stale or just busy
+            const projectCheck = await prisma.project.findUnique({
+                where: { id: projectId }
+            });
+
+            if (!projectCheck) throw new Error("Project not found");
+
+            const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
+
+            // If stale (started > 5 mins ago), override it
+            if (projectCheck.syncInProgress && projectCheck.syncStartedAt && projectCheck.syncStartedAt < fiveMinutesAgo) {
+                console.warn(`[ProjectSyncer] Found stale lock for project ${projectId}. Overriding.`);
+                await prisma.project.update({
+                    where: { id: projectId },
+                    data: { syncInProgress: true, syncStartedAt: new Date() }
+                });
+            } else {
+                console.warn(`[ProjectSyncer] Sync already in progress for project ${projectId}. rejecting.`);
+                return;
+            }
+        }
+
+        // 3. Lock Acquired! Now fetch data needed for sync
         const project = await prisma.project.findUnique({
             where: { id: projectId },
             include: { sources: true },
         });
 
-        if (!project) throw new Error("Project not found");
-
-        // 1. Ingest Data
-        for (const source of project.sources) {
-            await this.ingestSource(source, projectId);
+        if (!project) {
+            // Should theoretically not happen if updateMany succeeded, but safety first
+            await prisma.project.update({ where: { id: projectId }, data: { syncInProgress: false } });
+            throw new Error("Project not found after acquiring lock");
         }
 
-        // 2. Run Analysis
-        await this.analyzeProject(projectId);
+        try {
+            // 4. Ingest Data
+            for (const source of project.sources) {
+                await this.ingestSource(source, projectId);
+            }
+
+            // 5. Run Analysis
+            await this.analyzeProject(projectId);
+        } finally {
+            // 6. Release Lock
+            await prisma.project.update({
+                where: { id: projectId },
+                data: { syncInProgress: false }
+            });
+            console.log(`[ProjectSyncer] Sync lock released for project ${projectId}`);
+        }
     }
 
     private async ingestSource(source: any, projectId: string) {
@@ -54,40 +102,18 @@ export class ProjectSyncer {
             await new Promise(resolve => setTimeout(resolve, 1000));
 
             // Only require API keys for platforms that use them (each adapter validates its own key)
-            if (source.platform === "X") {
-                if (!process.env.SERPAPI_API_KEY || process.env.SERPAPI_API_KEY === "your_serpapi_key_here") {
-                    console.error("[ProjectSyncer] SERPAPI_API_KEY is missing or placeholder for X source");
-                    await prisma.dataSource.update({
-                        where: { id: source.id },
-                        data: { status: "ERROR" },
-                    });
-                    return;
-                }
-            }
-            if (source.platform === "INSTAGRAM") {
-                if (!process.env.APIFY_API_TOKEN) {
-                    console.error("[ProjectSyncer] APIFY_API_TOKEN is missing for Instagram source");
-                    await prisma.dataSource.update({
-                        where: { id: source.id },
-                        data: { status: "ERROR" },
-                    });
-                    return;
-                }
-            }
-
             // Determine sync window (Smart Sync)
             // Strategy:
-            // 1. New Project (lastSync is null) -> Fetch last 30 days (Initial Deep Pull)
-            // 2. Existing Project -> Fetch strictly from 1 second AFTER the last sync
-            let since: Date;
+            // 1. Strict Max Limit: Never fetch older than 30 days.
+            // 2. Resume: If lastSync exists and is within window, resume from there.
+            const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+            let since = thirtyDaysAgo;
 
             if (source.lastSync) {
-                const lastSyncTime = new Date(source.lastSync).getTime();
-                // One second after the last sync to avoid duplicates
-                since = new Date(lastSyncTime + 1000);
-            } else {
-                // 30 Days ago
-                since = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+                const lastSyncPlusOneSecond = new Date(new Date(source.lastSync).getTime() + 1000);
+                if (lastSyncPlusOneSecond > thirtyDaysAgo) {
+                    since = lastSyncPlusOneSecond;
+                }
             }
 
             console.log(`[ProjectSyncer] Smart Sync for ${source.platform} (Source ID: ${source.id})`);
@@ -102,12 +128,6 @@ export class ProjectSyncer {
                 result = await new GooglePlayAdapter().fetchReviews(config.packageName, since);
             } else if (source.platform === "APP_STORE") {
                 result = await new AppStoreAdapter().fetchReviews(config.appId, since);
-            } else if (source.platform === "INSTAGRAM") {
-                console.log(`[ProjectSyncer] Calling Instagram adapter with postUrls:`, config.postUrls);
-                result = await new InstagramAdapter().fetchComments(config.postUrls, since);
-            } else if (source.platform === "X") {
-                console.log(`[ProjectSyncer] Calling X adapter with query:`, config.query);
-                result = await new XAdapter().fetchMentions(config.query, since);
             }
 
             console.log(`[ProjectSyncer] Adapter returned:`, result ? `${result.items?.length || 0} items, ${result.errors?.length || 0} errors` : 'null/undefined');
