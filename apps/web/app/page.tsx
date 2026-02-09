@@ -1,4 +1,4 @@
-"use client";
+use client";
 
 import { motion } from "framer-motion";
 import {
@@ -47,6 +47,12 @@ export default function LandingPage() {
                         >
                             Get Started
                         </Link>
+                        <Link
+                            href="/auth/signin"
+                            className="bg-primary text-primary-foreground px-5 py-2.5 rounded-full text-sm font-bold hover:opacity-90 transition-all shadow-lg shadow-primary/20"
+                        >
+                            Get Started
+                        </Link>
                     </div>
                 </div>
             </nav>
@@ -67,7 +73,7 @@ export default function LandingPage() {
                                 </span>
                             </h1>
                             <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-                                ReviewInsight turns thousands of App Store, Google Play, and social media reviews into actionable product insights in seconds.
+                                ReviewInsight turns thousands of App Store and Google Play reviews into actionable product insights in seconds.
                             </p>
                         </motion.div>
 
@@ -75,19 +81,13 @@ export default function LandingPage() {
                             initial={{ opacity: 0, scale: 0.95 }}
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{ duration: 0.5, delay: 0.2 }}
-                            className="flex flex-col sm:flex-row items-center justify-center gap-4"
+                            className="flex items-center justify-center"
                         >
                             <Link
                                 href="/auth/signin"
-                                className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-primary text-primary-foreground font-bold text-lg flex items-center justify-center gap-2 hover:translate-y-[-2px] transition-all shadow-xl shadow-primary/25"
+                                className="px-8 py-4 rounded-2xl bg-primary text-primary-foreground font-bold text-lg flex items-center justify-center gap-2 hover:translate-y-[-2px] transition-all shadow-xl shadow-primary/25"
                             >
                                 Start Free Trial <ArrowRight className="w-5 h-5" />
-                            </Link>
-                            <Link
-                                href="#demo"
-                                className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-secondary text-secondary-foreground font-bold text-lg flex items-center justify-center gap-2 hover:bg-secondary/80 transition-all"
-                            >
-                                Watch Demo
                             </Link>
                         </motion.div>
                     </div>
@@ -236,6 +236,11 @@ export default function LandingPage() {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                         {[
                             {
+                                icon: <BarChart3 className="w-10 h-10 text-green-500" />,
+                                title: "Competitor Benchmarking",
+                                desc: "Sync your competitors' review feeds and see exactly how you measure up. Track them as easily as your own app."
+                            },
+                            {
                                 icon: <TrendingUp className="w-10 h-10 text-blue-500" />,
                                 title: "Sentiment Heatmaps",
                                 desc: "See where your product shines and where it struggles geographically and temporally."
@@ -249,11 +254,6 @@ export default function LandingPage() {
                                 icon: <Zap className="w-10 h-10 text-yellow-500" />,
                                 title: "Rapid Alerting",
                                 desc: "Get notified immediately when negative sentiment spikes to catch bugs before they go viral."
-                            },
-                            {
-                                icon: <BarChart3 className="w-10 h-10 text-green-500" />,
-                                title: "Competitor Benchmarking",
-                                desc: "Sync your competitors' review feeds and see exactly how you measure up."
                             }
                         ].map((feature, i) => (
                             <motion.div
