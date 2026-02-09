@@ -5,6 +5,15 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useSession } from "next-auth/react";
+import { useTheme } from "next-themes";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
     LayoutDashboard,
     BarChart2,
@@ -15,7 +24,12 @@ import {
     ChevronLeft,
     Box,
     Sparkles,
-    ShieldAlert
+    ShieldAlert,
+    Sun,
+    Moon,
+    Monitor,
+    LogOut,
+    Check
 } from "lucide-react";
 
 const globalItems = [
@@ -26,6 +40,7 @@ const globalItems = [
 
 export function Sidebar() {
     const { data: session } = useSession();
+    const { setTheme, theme } = useTheme();
     const pathname = usePathname();
     const [projectName, setProjectName] = useState("Loading...");
     const isProjectPage = pathname.startsWith("/projects/");
@@ -125,15 +140,48 @@ export function Sidebar() {
             </nav>
 
             <div className="p-4 border-t">
-                <div className="flex items-center gap-3 px-3 py-2 bg-accent/30 rounded-xl border border-border/50">
-                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-xs font-bold text-primary border border-primary/20">
-                        {userInitials}
-                    </div>
-                    <div className="flex flex-col">
-                        <span className="text-sm font-bold truncate w-32">{userName}</span>
-                        <span className="text-[10px] uppercase font-bold tracking-tighter text-muted-foreground/60">Free Plan</span>
-                    </div>
-                </div>
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <button className="flex items-center gap-3 px-3 py-2 w-full bg-accent/30 hover:bg-accent/50 transition-colors rounded-xl border border-border/50 text-left">
+                            <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-xs font-bold text-primary border border-primary/20">
+                                {userInitials}
+                            </div>
+                            <div className="flex flex-col flex-1 overflow-hidden">
+                                <span className="text-sm font-bold truncate">{userName}</span>
+                                <span className="text-[10px] uppercase font-bold tracking-tighter text-muted-foreground/60">Free Plan</span>
+                            </div>
+                            <div className="text-muted-foreground">
+                                <Settings className="w-4 h-4" />
+                            </div>
+                        </button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-56">
+                        <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem onClick={() => setTheme("light")}>
+                            <Sun className="mr-2 h-4 w-4" />
+                            <span>Light</span>
+                            {theme === "light" && <Check className="ml-auto h-4 w-4" />}
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => setTheme("dark")}>
+                            <Moon className="mr-2 h-4 w-4" />
+                            <span>Dark</span>
+                            {theme === "dark" && <Check className="ml-auto h-4 w-4" />}
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => setTheme("system")}>
+                            <Monitor className="mr-2 h-4 w-4" />
+                            <span>System</span>
+                            {theme === "system" && <Check className="ml-auto h-4 w-4" />}
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem asChild>
+                            <Link href="/api/auth/signout">
+                                <LogOut className="mr-2 h-4 w-4" />
+                                <span>Log out</span>
+                            </Link>
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
             </div>
         </div>
     );
