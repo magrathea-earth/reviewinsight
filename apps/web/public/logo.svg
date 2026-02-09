@@ -1,12 +1,44 @@
 <svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="512" height="512" rx="128" fill="url(#gradient)"/>
+  <!-- Background with gradient -->
+  <rect width="512" height="512" rx="128" fill="url(#logoGradient)"/>
+  
+  <!-- Glow effect -->
+  <circle cx="256" cy="256" r="180" fill="white" opacity="0.1" filter="blur(30px)"/>
+  
+  <!-- Main icon - Brain/Analytics symbol -->
+  <g transform="translate(256, 256)">
+    <!-- Star rating symbol -->
+    <path d="M 0 -80 L 20 -20 L 80 -20 L 30 20 L 50 80 L 0 40 L -50 80 L -30 20 L -80 -20 L -20 -20 Z" 
+          fill="white" opacity="0.95"/>
+    
+    <!-- Circuit/brain lines -->
+    <circle cx="0" cy="0" r="100" stroke="white" stroke-width="8" fill="none" opacity="0.6"/>
+    <circle cx="0" cy="0" r="70" stroke="white" stroke-width="6" fill="none" opacity="0.4"/>
+    
+    <!-- Data points -->
+    <circle cx="60" cy="-60" r="8" fill="white"/>
+    <circle cx="-60" cy="-60" r="8" fill="white"/>
+    <circle cx="60" cy="60" r="8" fill="white"/>
+    <circle cx="-60" cy="60" r="8" fill="white"/>
+    
+    <!-- Connecting lines -->
+    <line x1="0" y1="-70" x2="0" y2="-100" stroke="white" stroke-width="4" opacity="0.6"/>
+    <line x1="70" y1="0" x2="100" y2="0" stroke="white" stroke-width="4" opacity="0.6"/>
+    <line x1="0" y1="70" x2="0" y2="100" stroke="white" stroke-width="4" opacity="0.6"/>
+    <line x1="-70" y1="0" x2="-100" y2="0" stroke="white" stroke-width="4" opacity="0.6"/>
+  </g>
+  
+  <!-- Sparkle effects -->
+  <circle cx="400" cy="100" r="4" fill="white" opacity="0.8"/>
+  <circle cx="100" cy="400" r="4" fill="white" opacity="0.8"/>
+  <circle cx="420" cy="420" r="3" fill="white" opacity="0.6"/>
+  <circle cx="80" cy="80" r="3" fill="white" opacity="0.6"/>
+  
   <defs>
-    <linearGradient id="gradient" x1="0" y1="0" x2="512" y2="512">
+    <linearGradient id="logoGradient" x1="0" y1="0" x2="512" y2="512">
       <stop offset="0%" stop-color="#8B5CF6"/>
+      <stop offset="50%" stop-color="#7C3AED"/>
       <stop offset="100%" stop-color="#3B82F6"/>
     </linearGradient>
   </defs>
-  <!-- Brain/Star Icon -->
-  <path d="M256 128L280 200L352 200L296 240L320 312L256 272L192 312L216 240L160 200L232 200L256 128Z" fill="white" opacity="0.9"/>
-  <circle cx="256" cy="280" r="80" stroke="white" stroke-width="12" fill="none" opacity="0.7"/>
 </svg>
