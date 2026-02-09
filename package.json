@@ -12,7 +12,6 @@
         "format": "prettier --write \"**/*.{ts,tsx,md}\""
     },
     "devDependencies": {
-        "@next/swc-win32-x64-msvc": "16.1.6",
         "prettier": "^3.2.5",
         "turbo": "^1.12.4",
         "typescript": "^5.3.3"
