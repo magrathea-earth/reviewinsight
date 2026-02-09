@@ -1,0 +1,44 @@
+<svg width="1200" height="800" viewBox="0 0 1200 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1200" height="800" fill="#0A0A0F"/>
+  
+  <!-- Gradient overlay -->
+  <rect width="1200" height="800" fill="url(#heroGradient)" opacity="0.1"/>
+  
+  <!-- Dashboard mockup elements -->
+  <!-- Header -->
+  <rect x="40" y="40" width="1120" height="60" rx="12" fill="#18181B"/>
+  
+  <!-- Stats cards -->
+  <rect x="40" y="120" width="350" height="200" rx="16" fill="#18181B"/>
+  <rect x="410" y="120" width="350" height="200" rx="16" fill="#18181B"/>
+  <rect x="780" y="120" width="380" height="200" rx="16" fill="#18181B"/>
+  
+  <!-- Chart area -->
+  <rect x="40" y="340" width="720" height="420" rx="16" fill="#18181B"/>
+  
+  <!-- Sidebar -->
+  <rect x="780" y="340" width="380" height="420" rx="16" fill="#18181B"/>
+  
+  <!-- Accent elements -->
+  <circle cx="100" cy="180" r="30" fill="url(#accentGradient)" opacity="0.6"/>
+  <circle cx="470" cy="180" r="30" fill="url(#accentGradient)" opacity="0.6"/>
+  <circle cx="940" cy="180" r="30" fill="url(#accentGradient)" opacity="0.6"/>
+  
+  <!-- Chart lines -->
+  <path d="M 80 600 Q 200 500 320 550 T 560 480 T 720 520" stroke="url(#accentGradient)" stroke-width="4" fill="none"/>
+  
+  <defs>
+    <linearGradient id="heroGradient" x1="0" y1="0" x2="1200" y2="800">
+      <stop offset="0%" stop-color="#8B5CF6"/>
+      <stop offset="100%" stop-color="#3B82F6"/>
+    </linearGradient>
+    <linearGradient id="accentGradient" x1="0" y1="0" x2="100" y2="100">
+      <stop offset="0%" stop-color="#8B5CF6"/>
+      <stop offset="100%" stop-color="#3B82F6"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Text placeholder -->
+  <text x="600" y="400" text-anchor="middle" fill="#ffffff" opacity="0.3" font-size="48" font-weight="bold" font-family="sans-serif">ReviewInsight Dashboard</text>
+</svg>

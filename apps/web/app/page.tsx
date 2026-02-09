@@ -26,7 +26,7 @@ export default function LandingPage() {
             <nav className="fixed top-0 w-full z-50 glass border-b">
                 <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                        <Image src="/logo.png" alt="ReviewInsight Logo" width={32} height={32} className="w-8 h-8 rounded-lg" />
+                        <Image src="/logo.svg" alt="ReviewInsight Logo" width={32} height={32} className="w-8 h-8 rounded-lg" />
                         <span className="text-xl font-bold tracking-tight">ReviewInsight</span>
                     </div>
                     <div className="hidden md:flex items-center gap-8 text-sm font-medium text-muted-foreground">
@@ -101,7 +101,7 @@ export default function LandingPage() {
                         <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-purple-500/20 blur-[100px] -z-10" />
                         <div className="rounded-[2.5rem] border bg-card p-4 shadow-2xl overflow-hidden">
                             <Image
-                                src="/hero.png"
+                                src="/hero.svg"
                                 alt="ReviewInsight Dashboard Preview"
                                 width={1200}
                                 height={800}
@@ -313,7 +313,7 @@ export default function LandingPage() {
                 <div className="max-w-7xl mx-auto px-6">
                     <div className="flex flex-col md:flex-row justify-between items-center gap-12">
                         <div className="flex items-center gap-2">
-                            <Image src="/logo.png" alt="ReviewInsight Logo" width={32} height={32} className="w-8 h-8 rounded-lg" />
+                            <Image src="/logo.svg" alt="ReviewInsight Logo" width={32} height={32} className="w-8 h-8 rounded-lg" />
                             <span className="text-xl font-bold tracking-tight">ReviewInsight</span>
                         </div>
                         <div className="flex gap-12 text-sm font-medium text-muted-foreground">
