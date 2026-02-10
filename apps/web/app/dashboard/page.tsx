@@ -41,6 +41,8 @@ export default function Dashboard() {
     }, []);
 
     const handleAddProject = async (name: string, platform: string, configInput?: string) => {
+        alert(`[DEBUG] handleAddProject called with: ${name}, ${platform}`);
+        console.log("[Dashboard] handleAddProject called", { name, platform, configInput });
         try {
             const platformMap: Record<string, string> = {
                 'google': 'GOOGLE_PLAY',
