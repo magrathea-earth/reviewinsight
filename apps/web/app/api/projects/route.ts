@@ -85,6 +85,8 @@ export async function POST(req: NextRequest) {
         include: { _count: { select: { projects: true } } }
     });
 
+    console.log(`[API] Checking limits for Org: ${orgId}, Plan: ${org?.plan}, Project Count: ${org?._count?.projects}`);
+
     if (org?.plan === "STARTER" && org._count.projects >= 1) {
         return NextResponse.json({
             error: "Free Plan Limit Reached",

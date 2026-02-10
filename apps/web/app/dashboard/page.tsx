@@ -66,6 +66,7 @@ export default function Dashboard() {
 
             if (res.status === 403) {
                 const errorData = await res.json();
+                console.log("[Dashboard] 403 Error Data:", errorData);
                 if (errorData.code === "LIMIT_REACHED") {
                     setUpgradeModalOpen(true);
                     return;
