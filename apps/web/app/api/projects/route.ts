@@ -79,6 +79,20 @@ export async function POST(req: NextRequest) {
         console.log("Found existing org:", orgId);
     }
 
+    // CHECK PLAN LIMITS
+    const org = await prisma.organization.findUnique({
+        where: { id: orgId },
+        include: { _count: { select: { projects: true } } }
+    });
+
+    if (org?.plan === "STARTER" && org._count.projects >= 1) {
+        return NextResponse.json({
+            error: "Free Plan Limit Reached",
+            code: "LIMIT_REACHED",
+            message: "You can only create 1 project on the Free Plan. Please upgrade to Pro to add more."
+        }, { status: 403 });
+    }
+
     console.log("Creating project with orgId:", orgId);
     const project = await prisma.project.create({
         data: {

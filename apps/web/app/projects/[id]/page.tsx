@@ -9,6 +9,7 @@ import { RefreshCw, ArrowUpRight, Filter, Download, Loader2, ChevronDown, User, 
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/components/ui/use-toast";
+import { UpgradeModal } from "@/components/upgrade-modal";
 
 export default function ProjectPage({ params }: { params: { id: string } }) {
     const router = useRouter();
@@ -18,6 +19,8 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
     const [expandedReviews, setExpandedReviews] = useState<Record<number, boolean>>({});
     const [typeFilter, setTypeFilter] = useState("all");
     const [periodFilter, setPeriodFilter] = useState("all");
+    const [upgradeModalOpen, setUpgradeModalOpen] = useState(false);
+    const [upgradeMessage, setUpgradeMessage] = useState("");
     const { toast } = useToast();
 
     useEffect(() => {
@@ -136,6 +139,10 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
                                     });
                                     if (res.ok) {
                                         toast({ title: "Sync started!", description: "Refreshing project data..." });
+                                    } else if (res.status === 429) {
+                                        const errorData = await res.json();
+                                        setUpgradeMessage(errorData.message);
+                                        setUpgradeModalOpen(true);
                                     } else {
                                         toast({ title: "Failed to start sync", variant: "destructive" });
                                     }
@@ -365,6 +372,12 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
 
                 </section>
             </main>
+            <UpgradeModal
+                isOpen={upgradeModalOpen}
+                onClose={() => setUpgradeModalOpen(false)}
+                title="Rate Limit Reached"
+                description={upgradeMessage || "You've reached the sync limit for the Free plan. Upgrade to Pro for unlimited syncs."}
+            />
         </div>
     );
 }

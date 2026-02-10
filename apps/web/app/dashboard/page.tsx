@@ -13,9 +13,11 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { UpgradeModal } from "@/components/upgrade-modal";
 
 export default function Dashboard() {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [upgradeModalOpen, setUpgradeModalOpen] = useState(false);
     const [projects, setProjects] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -61,6 +63,14 @@ export default function Dashboard() {
                                 { query: configInput }
                 })
             });
+
+            if (res.status === 403) {
+                const errorData = await res.json();
+                if (errorData.code === "LIMIT_REACHED") {
+                    setUpgradeModalOpen(true);
+                    return;
+                }
+            }
 
             const newProject = await res.json();
 
@@ -227,6 +237,12 @@ export default function Dashboard() {
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 onCreate={handleAddProject}
+            />
+            <UpgradeModal
+                isOpen={upgradeModalOpen}
+                onClose={() => setUpgradeModalOpen(false)}
+                title="Limit Reached"
+                description="You've reached the 1-project limit on the Free tier. Upgrade to Pro to create unlimited projects."
             />
         </div>
     );
