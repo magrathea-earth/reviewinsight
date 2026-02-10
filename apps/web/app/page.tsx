@@ -26,7 +26,7 @@ export default function LandingPage() {
             <nav className="fixed top-0 w-full z-50 glass border-b">
                 <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                        <Image src="/logo.svg" alt="ReviewInsight Logo" width={32} height={32} className="w-8 h-8 rounded-lg" />
+                        <Image src="/logo.png" alt="ReviewInsight Logo" width={32} height={32} className="w-8 h-8 rounded-lg" />
                         <span className="text-xl font-bold tracking-tight">ReviewInsight</span>
                     </div>
                     <div className="hidden md:flex items-center gap-8 text-sm font-medium text-muted-foreground">
@@ -313,7 +313,7 @@ export default function LandingPage() {
                 <div className="max-w-7xl mx-auto px-6">
                     <div className="flex flex-col md:flex-row justify-between items-center gap-12">
                         <div className="flex items-center gap-2">
-                            <Image src="/logo.svg" alt="ReviewInsight Logo" width={32} height={32} className="w-8 h-8 rounded-lg" />
+                            <Image src="/logo.png" alt="ReviewInsight Logo" width={32} height={32} className="w-8 h-8 rounded-lg" />
                             <span className="text-xl font-bold tracking-tight">ReviewInsight</span>
                         </div>
                         <div className="flex gap-12 text-sm font-medium text-muted-foreground">
