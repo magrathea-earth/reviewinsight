@@ -64,22 +64,34 @@ export default function Dashboard() {
                 })
             });
 
+            console.log("[Dashboard] Project creation response status:", res.status);
+
+            // Handle 403 Forbidden (limit reached)
             if (res.status === 403) {
                 const errorData = await res.json();
                 console.log("[Dashboard] 403 Error Data:", errorData);
                 if (errorData.code === "LIMIT_REACHED") {
+                    console.log("[Dashboard] Showing upgrade modal");
                     setIsModalOpen(false);
                     setUpgradeModalOpen(true);
                     return;
                 }
-            }
-
-            const newProject = await res.json();
-
-            if (res.status !== 200) {
-                alert(`Error: ${newProject.error || "Failed to create project"}`);
+                // If 403 but not limit reached, show generic error
+                alert(`Access denied: ${errorData.error || "Unknown error"}`);
                 return;
             }
+
+            // Handle non-200 responses
+            if (res.status !== 200 && res.status !== 201) {
+                const errorData = await res.json();
+                console.log("[Dashboard] Error response:", errorData);
+                alert(`Error: ${errorData.error || "Failed to create project"}`);
+                return;
+            }
+
+            // Success case
+            const newProject = await res.json();
+            console.log("[Dashboard] Project created successfully:", newProject.id);
 
             // Refetch to get formatted stats
             const refreshRes = await fetch("/api/projects");
