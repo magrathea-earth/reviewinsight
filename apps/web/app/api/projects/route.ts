@@ -81,13 +81,19 @@ export async function POST(req: NextRequest) {
 
     // CHECK PLAN LIMITS
     const org = await prisma.organization.findUnique({
-        where: { id: orgId },
-        include: { _count: { select: { projects: true } } }
+        where: { id: orgId }
     });
 
-    console.log(`[API] Checking limits for Org: ${orgId}, Plan: ${org?.plan}, Project Count: ${org?._count?.projects}`);
+    const projectCount = await prisma.project.count({
+        where: { organizationId: orgId }
+    });
 
-    if (org?.plan === "STARTER" && org._count.projects >= 1) {
+    console.log(`[API] Checking limits for Org: ${orgId}, Plan: ${org?.plan}, Project Count: ${projectCount}`);
+
+    // If plan is STARTER or undefined/null (default to starter), enforce limit
+    const isFreePlan = !org?.plan || org.plan === "STARTER";
+
+    if (isFreePlan && projectCount >= 1) {
         return NextResponse.json({
             error: "Free Plan Limit Reached",
             code: "LIMIT_REACHED",
