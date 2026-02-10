@@ -148,7 +148,7 @@ export default function Dashboard() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {Array.isArray(projects) && projects.map((project) => (
                         <Link key={project.id} href={`/projects/${project.id}`}>
-                            <div className="group border rounded-2xl p-6 bg-card hover:border-primary/50 transition-all hover:shadow-[0_0_20px_rgba(0,0,0,0.03)] relative overflow-hidden">
+                            <div className="group border rounded-2xl p-6 bg-card hover:border-primary/50 transition-all hover:shadow-[0_0_20px_rgba(0,0,0,0.03)] relative overflow-hidden min-h-[220px] flex flex-col justify-between">
                                 <div className="flex justify-between items-start mb-4">
                                     <div className="w-10 h-10 rounded-xl bg-accent flex items-center justify-center font-bold text-primary">
                                         {getPlatformLogo(project)}
