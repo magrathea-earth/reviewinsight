@@ -156,17 +156,17 @@ export default function Dashboard() {
     };
 
     return (
-        <div className="flex min-h-screen bg-background">
+        <div className="flex flex-col md:flex-row min-h-screen bg-background">
             <Sidebar />
 
-            <main className="flex-1 overflow-y-auto px-10 py-12">
-                <header className="flex items-center justify-between mb-12">
-                    <div>
-                        <h1 className="text-4xl font-bold tracking-tight">Projects</h1>
-                        <p className="text-muted-foreground mt-2">Manage your products and data sources.</p>
+            <main className="flex-1 overflow-y-auto px-4 py-8 md:px-10 md:py-12">
+                <header className="flex flex-col md:flex-row md:items-center justify-between mb-8 md:mb-12 gap-6 md:gap-0">
+                    <div className="text-center md:text-left">
+                        <h1 className="text-3xl md:text-4xl font-bold tracking-tight">Projects</h1>
+                        <p className="text-muted-foreground mt-2 text-sm md:text-base">Manage your products and data sources.</p>
                     </div>
 
-                    <Button className="gap-2 premium" onClick={() => setIsModalOpen(true)}>
+                    <Button className="gap-2 premium w-full md:w-auto" onClick={() => setIsModalOpen(true)}>
                         <Plus className="w-4 h-4" /> New Project
                     </Button>
                 </header>
@@ -258,7 +258,7 @@ export default function Dashboard() {
                 isOpen={upgradeModalOpen}
                 onClose={() => setUpgradeModalOpen(false)}
                 title="Limit Reached"
-                description="You've reached the 1-project limit on the Free tier. Upgrade to Pro to create unlimited projects."
+                description="You are currently on the Free Plan. Upgrade to create additional projects."
             />
         </div>
     );

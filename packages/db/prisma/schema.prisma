@@ -62,6 +62,7 @@ model Organization {
   updatedAt        DateTime           @updatedAt
   stripeCustomerId String?            @unique
   subscriptionId   String?
+  subscriptionStatus String @default("FREE")
   plan             Plan               @default(STARTER)
   projects         Project[]
   users            UserOrganization[]
@@ -90,6 +91,7 @@ model Project {
   items          ReviewItem[]
   syncInProgress Boolean           @default(false)
   syncStartedAt  DateTime?
+  syncCount      Int               @default(0)
 }
 
 model DataSource {

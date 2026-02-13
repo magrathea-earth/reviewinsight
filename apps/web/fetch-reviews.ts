@@ -43,8 +43,8 @@ Usage:
             console.log(`  Name: ${project.name}`);
             console.log(`  Sources: ${project.sources.length}`);
             project.sources.forEach(source => {
-                const config = typeof source.config === 'string' ? JSON.parse(source.config) : source.config;
-                console.log(`    - ${source.type}: ${config.appId || config.packageName || 'N/A'}`);
+                const config = typeof source.config === 'string' ? JSON.parse(source.config as string) : source.config;
+                console.log(`    - ${source.platform}: ${(config as any).appId || (config as any).packageName || 'N/A'}`);
             });
             console.log("");
         }
@@ -74,31 +74,34 @@ Usage:
         console.log(`\n🔨 Creating project: ${projectName}\n`);
 
         // Create project (you'll need to add organizationId)
+        // Find default org
+        const defaultOrg = await prisma.organization.findFirst();
+
         const project = await prisma.project.create({
             data: {
                 name: projectName,
-                organizationId: "default", // Replace with actual org ID
+                organizationId: defaultOrg?.id || "default_org_id_placeholder",
             }
         });
 
         // Create sources
         if (appStoreId) {
-            await prisma.source.create({
+            await prisma.dataSource.create({
                 data: {
                     projectId: project.id,
-                    type: "APP_STORE",
-                    config: JSON.stringify({ appId: appStoreId })
+                    platform: "APP_STORE",
+                    config: { appId: appStoreId }
                 }
             });
             console.log(`  ✅ Added App Store source: ${appStoreId}`);
         }
 
         if (googlePlayId) {
-            await prisma.source.create({
+            await prisma.dataSource.create({
                 data: {
                     projectId: project.id,
-                    type: "GOOGLE_PLAY",
-                    config: JSON.stringify({ packageName: googlePlayId })
+                    platform: "GOOGLE_PLAY",
+                    config: { packageName: googlePlayId }
                 }
             });
             console.log(`  ✅ Added Google Play source: ${googlePlayId}`);
@@ -139,7 +142,7 @@ Usage:
     console.log("\n✅ Sync complete! Reviews from the last 30 days have been fetched.");
 
     // Show stats
-    const reviewCount = await prisma.review.count({
+    const reviewCount = await prisma.reviewItem.count({
         where: { projectId }
     });
 
