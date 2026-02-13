@@ -37,21 +37,9 @@ export default function LandingPage() {
                     <div className="flex items-center gap-4">
                         <Link
                             href="/auth/signin"
-                            className="text-sm font-medium hover:text-primary transition-colors"
+                            className="bg-primary text-primary-foreground px-6 py-2.5 rounded-full text-sm font-bold hover:opacity-90 transition-all shadow-lg shadow-primary/20"
                         >
-                            Sign In
-                        </Link>
-                        <Link
-                            href="/auth/signin"
-                            className="bg-primary text-primary-foreground px-5 py-2.5 rounded-full text-sm font-bold hover:opacity-90 transition-all shadow-lg shadow-primary/20"
-                        >
-                            Get Started
-                        </Link>
-                        <Link
-                            href="/auth/signin"
-                            className="bg-primary text-primary-foreground px-5 py-2.5 rounded-full text-sm font-bold hover:opacity-90 transition-all shadow-lg shadow-primary/20"
-                        >
-                            Get Started
+                            Login
                         </Link>
                     </div>
                 </div>
