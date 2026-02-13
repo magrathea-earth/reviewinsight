@@ -36,22 +36,32 @@ export async function POST(req: NextRequest) {
         where: { projects: { some: { id: projectId } } }
     });
 
-    const isFree = !org?.subscriptionStatus || org.subscriptionStatus === "FREE";
-
-    if (isFree) {
-        // Check sync count
-        const currentSyncCount = project.syncCount || 0;
+    if (org?.plan === "STARTER" || !org?.plan) {
+        // STRICT GATING: Max 1 sync run total per project for free users
         const SYNC_LIMIT = 1;
 
-        if (currentSyncCount >= SYNC_LIMIT) {
+        // We check syncCount directly from the project (which we need to fetch or include)
+        // Re-fetching project to get syncCount if not included above (it wasn't included in line 26)
+        const projectWithCount = await prisma.project.findUnique({
+            where: { id: projectId },
+            select: { syncCount: true, syncInProgress: true }
+        });
+
+        const currentCount = projectWithCount?.syncCount || 0;
+
+        console.log(`[API] Checking limits - Plan: STARTER, Count: ${currentCount}, Limit: ${SYNC_LIMIT}`);
+
+        // Allow if count < limit. 
+        if (currentCount >= SYNC_LIMIT) {
             return NextResponse.json({
-                error: "Sync Limit Reached",
-                code: "LIMIT_REACHED",
+                error: "Free Limit Reached",
+                code: "LIMIT_REACHED", // Match frontend expectation
                 message: "You have reached your sync limit for the Free Plan. Upgrade to continue monitoring new reviews."
             }, { status: 429 });
         }
 
-        // Increment sync count
+        // If allowed, we must increment the counter.
+        // We increment BEFORE the sync to prevent race conditions allowing extra syncs.
         await prisma.project.update({
             where: { id: projectId },
             data: { syncCount: { increment: 1 } }

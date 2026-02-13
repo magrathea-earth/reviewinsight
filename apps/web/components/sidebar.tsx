@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useSession } from "next-auth/react";
 import { useTheme } from "next-themes";
+import { Button } from "@/components/ui/button";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -29,7 +30,9 @@ import {
     Moon,
     Monitor,
     LogOut,
-    Check
+    Check,
+    Menu,
+    X
 } from "lucide-react";
 
 const globalItems = [
@@ -38,7 +41,7 @@ const globalItems = [
     { name: "Settings", href: "/settings", icon: Settings },
 ];
 
-export function Sidebar() {
+function SidebarContent({ onClose }: { onClose?: () => void }) {
     const { data: session } = useSession();
     const { setTheme, theme } = useTheme();
     const pathname = usePathname();
@@ -57,6 +60,13 @@ export function Sidebar() {
         }
     }, [projectId]);
 
+    // Close mobile menu when path changes
+    useEffect(() => {
+        if (onClose) {
+            onClose();
+        }
+    }, [pathname]);
+
     const projectItems = [
         { name: "Overview", href: `/projects/${projectId}`, icon: LayoutDashboard, exact: true },
         { name: "AI Insights", href: `/projects/${projectId}/insights`, icon: ShieldAlert },
@@ -67,7 +77,7 @@ export function Sidebar() {
     const userInitials = userName.split(" ").map(n => n[0]).join("").slice(0, 2).toUpperCase();
 
     return (
-        <div className="w-64 border-r bg-background/50 backdrop-blur-md flex flex-col h-screen sticky top-0">
+        <div className="flex flex-col h-full">
             <div className="p-6">
                 <Link href="/dashboard" className="flex items-center gap-2 font-bold text-xl tracking-tight hover:opacity-80 transition-opacity">
                     <img src="/logo.png" alt="ReviewInsight" className="w-8 h-8 object-contain" />
@@ -98,6 +108,7 @@ export function Sidebar() {
                                     <Link
                                         key={item.name}
                                         href={item.href}
+                                        onClick={onClose}
                                         className={cn(
                                             "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
                                             isActive
@@ -123,6 +134,7 @@ export function Sidebar() {
                                 <Link
                                     key={item.href}
                                     href={item.href}
+                                    onClick={onClose}
                                     className={cn(
                                         "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
                                         isActive
@@ -139,7 +151,7 @@ export function Sidebar() {
                 )}
             </nav>
 
-            <div className="p-4 border-t">
+            <div className="p-4 border-t mt-auto">
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <button className="flex items-center gap-3 px-3 py-2 w-full bg-accent/30 hover:bg-accent/50 transition-colors rounded-xl border border-border/50 text-left">
@@ -184,5 +196,40 @@ export function Sidebar() {
                 </DropdownMenu>
             </div>
         </div>
+    );
+}
+
+export function Sidebar() {
+    const [isMobileOpen, setIsMobileOpen] = useState(false);
+
+    return (
+        <>
+            {/* Desktop Sidebar */}
+            <div className="hidden md:flex w-64 border-r bg-background/50 backdrop-blur-md flex-col h-screen sticky top-0">
+                <SidebarContent />
+            </div>
+
+            {/* Mobile Header & Overlay */}
+            <div className="md:hidden flex flex-col">
+                <div className="fixed top-0 left-0 right-0 h-16 bg-background/80 backdrop-blur-xl border-b z-50 flex items-center justify-between px-4">
+                    <Link href="/dashboard" className="flex items-center gap-2 font-bold text-lg">
+                        <img src="/logo.png" alt="ReviewInsight" className="w-6 h-6 object-contain" />
+                        <span>ReviewInsight</span>
+                    </Link>
+                    <Button variant="ghost" size="icon" onClick={() => setIsMobileOpen(!isMobileOpen)}>
+                        {isMobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                    </Button>
+                </div>
+
+                {/* Spacer for fixed header */}
+                <div className="h-16 w-full flex-shrink-0" />
+
+                {isMobileOpen && (
+                    <div className="fixed inset-0 top-16 z-40 bg-background/95 backdrop-blur-sm animate-in fade-in slide-in-from-left-5 duration-200">
+                        <SidebarContent onClose={() => setIsMobileOpen(false)} />
+                    </div>
+                )}
+            </div>
+        </>
     );
 }

@@ -33,9 +33,7 @@ export default function DebugSyncPage() {
                     "",
                     "⚠️ Check your terminal (where npm run dev is running) for detailed logs:",
                     "  - [ProjectSyncer] Starting sync...",
-                    "  - [ProjectSyncer] Config for X: ...",
-                    "  - [XAdapter] Found X results...",
-                    "  - [ProjectSyncer] Saving X items...",
+                    "  - [ProjectSyncer] Config for sources...",
                 ]);
             } else {
                 setLogs((prev) => [

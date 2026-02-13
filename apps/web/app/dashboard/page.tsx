@@ -258,7 +258,7 @@ export default function Dashboard() {
                 isOpen={upgradeModalOpen}
                 onClose={() => setUpgradeModalOpen(false)}
                 title="Limit Reached"
-                description="You are currently on the Free Plan. Upgrade to create additional projects."
+                description="You've reached the 1-project limit on the Free tier. Upgrade to Pro to create unlimited projects."
             />
         </div>
     );

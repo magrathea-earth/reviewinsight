@@ -110,26 +110,26 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
     };
 
     return (
-        <div className="flex min-h-screen bg-background">
+        <div className="flex flex-col md:flex-row min-h-screen bg-background">
             <Sidebar />
 
-            <main className="flex-1 overflow-y-auto px-10 py-12">
-                <header className="flex items-center justify-between mb-12">
-                    <div>
-                        <div className="flex items-center gap-2 mb-1">
-                            <span className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Project</span>
+            <main className="flex-1 overflow-y-auto px-4 py-8 md:px-10 md:py-12">
+                <header className="flex flex-col md:flex-row md:items-center justify-between mb-8 md:mb-12 gap-6 md:gap-0">
+                    <div className="text-center md:text-left">
+                        <div className="flex items-center justify-center md:justify-start gap-2 mb-1">
+                            <span className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wider">Project</span>
                         </div>
-                        <div className="flex items-center gap-4">
-                            <h1 className="text-4xl font-bold tracking-tight">{project.name}</h1>
+                        <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4">
+                            <h1 className="text-3xl md:text-4xl font-bold tracking-tight">{project.name}</h1>
                             {getPlatformDisplay(project.sources)}
                         </div>
-                        <div className="text-muted-foreground mt-2">Customer sentiment across all platforms.</div>
+                        <div className="text-muted-foreground mt-2 text-sm md:text-base">Customer sentiment across all platforms.</div>
                     </div>
 
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center justify-center md:justify-end gap-3 w-full md:w-auto">
 
                         <Button
-                            className="gap-2 premium"
+                            className="gap-2 premium w-full md:w-auto"
                             onClick={async () => {
                                 try {
                                     const res = await fetch('/api/sync', {
@@ -157,9 +157,9 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
                 </header>
 
                 {/* KPI Row */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8 mb-12 md:mb-16">
                     {stats.map((stat: any, i: number) => (
-                        <div key={i} className="flex flex-col">
+                        <div key={i} className="flex flex-col p-4 md:p-0 bg-accent/20 md:bg-transparent rounded-xl md:rounded-none">
                             <span className="text-sm text-muted-foreground mb-1 font-medium">{stat.label}</span>
                             <span className={cn("text-3xl font-bold tracking-tight", stat.color)}>{stat.value}</span>
                             <span className="text-xs text-muted-foreground mt-1.5 flex items-center gap-1">
@@ -221,7 +221,7 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
                             <div className="flex flex-col items-center gap-4 pt-4">
                                 <Button
                                     variant="ghost"
-                                    className="gap-2 text-muted-foreground hover:text-primary group"
+                                    className="gap-2 text-muted-foreground hover:text-primary group w-full md:w-auto"
                                     onClick={() => setShowAllReviews(!showAllReviews)}
                                 >
                                     <span>{showAllReviews ? "Hide all reviews" : "See all fetched reviews"}</span>
@@ -231,12 +231,12 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
 
                             {showAllReviews && (
                                 <div className="space-y-4 animate-in fade-in slide-in-from-top-4 duration-500">
-                                    <div className="flex flex-wrap items-center justify-end gap-3 px-4 py-3 bg-accent/5 border rounded-xl">
-                                        <div className="flex items-center gap-2 text-[10px] font-bold text-muted-foreground uppercase tracking-wider">
+                                    <div className="flex flex-col md:flex-row flex-wrap items-stretch md:items-center justify-end gap-3 px-4 py-3 bg-accent/5 border rounded-xl">
+                                        <div className="flex items-center gap-2 text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-2 md:mb-0">
                                             <Filter className="w-3 h-3" /> Filters:
                                         </div>
 
-                                        <div className="flex bg-background border rounded-lg p-0.5">
+                                        <div className="flex bg-background border rounded-lg p-0.5 overflow-x-auto">
                                             {[
                                                 { label: "All", value: "all" },
                                                 { label: "Today", value: "today" },
@@ -249,7 +249,7 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
                                                         setPeriodFilter(p.value);
                                                     }}
                                                     className={cn(
-                                                        "px-2.5 py-1 text-[10px] font-bold rounded-md transition-all",
+                                                        "px-2.5 py-1 text-[10px] font-bold rounded-md transition-all whitespace-nowrap",
                                                         periodFilter === p.value ? "bg-primary text-primary-foreground shadow-sm" : "hover:bg-accent text-muted-foreground"
                                                     )}
                                                 >
@@ -258,12 +258,12 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
                                             ))}
                                         </div>
 
-                                        <div className="h-4 w-px bg-border mx-1" />
+                                        <div className="hidden md:block h-4 w-px bg-border mx-1" />
 
                                         <select
                                             value={typeFilter}
                                             onChange={(e) => setTypeFilter(e.target.value)}
-                                            className="bg-background border rounded-lg px-2 py-1 text-xs outline-none focus:border-primary cursor-pointer font-bold h-7"
+                                            className="bg-background border rounded-lg px-2 py-1 text-xs outline-none focus:border-primary cursor-pointer font-bold h-9 md:h-7 w-full md:w-auto"
                                         >
                                             <option value="all">All Feedback</option>
                                             <option value="good">Good Reviews (4-5★)</option>
@@ -272,7 +272,7 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
                                         {(typeFilter !== "all" || periodFilter !== "all") && (
                                             <button
                                                 onClick={() => { setTypeFilter("all"); setPeriodFilter("all"); }}
-                                                className="text-[10px] text-primary hover:underline font-bold"
+                                                className="text-[10px] text-primary hover:underline font-bold text-center py-1"
                                             >
                                                 RESET
                                             </button>
@@ -280,75 +280,77 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
                                     </div>
 
                                     <div className="bg-accent/10 rounded-2xl overflow-hidden border">
-                                        <table className="w-full text-left text-sm">
-                                            <thead className="text-muted-foreground uppercase text-[10px] font-bold tracking-wider">
-                                                <tr className="border-b bg-background/50">
-                                                    <th className="px-6 py-4">Review</th>
-                                                    <th className="px-6 py-4">Platform</th>
-                                                    <th className="px-6 py-4 text-center">Rating</th>
-                                                    <th className="px-6 py-4">Date</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody className="divide-y divide-border/50">
-                                                {project.recentReviews?.filter((r: any) => {
-                                                    const reviewDate = new Date(r.dateISO || r.date);
-                                                    const now = new Date();
-
-                                                    // Period Filtering
-                                                    let matchesPeriod = true;
-                                                    if (periodFilter === "today") {
-                                                        matchesPeriod = reviewDate.toDateString() === now.toDateString();
-                                                    } else if (periodFilter === "week") {
-                                                        const weekAgo = new Date();
-                                                        weekAgo.setDate(now.getDate() - 7);
-                                                        matchesPeriod = reviewDate >= weekAgo;
-                                                    } else if (periodFilter === "month") {
-                                                        const monthAgo = new Date();
-                                                        monthAgo.setMonth(now.getMonth() - 1);
-                                                        matchesPeriod = reviewDate >= monthAgo;
-                                                    }
-
-                                                    const isGood = (r.rating && r.rating >= 4) || r.sentiment === 'POS';
-                                                    const matchesType = typeFilter === "all" || (typeFilter === "good" ? isGood : !isGood);
-
-                                                    return matchesPeriod && matchesType;
-                                                }).map((review: any, i: number) => (
-                                                    <tr key={i} className="hover:bg-accent/40 transition-colors">
-                                                        <td className="px-6 py-5 max-w-md">
-                                                            <div className={cn("font-medium transition-all duration-300", !expandedReviews[i] && "line-clamp-2")}>
-                                                                {review.url ? (
-                                                                    <a href={review.url} target="_blank" rel="noopener noreferrer" className="hover:text-primary hover:underline transition-colors">
-                                                                        {review.text}
-                                                                    </a>
-                                                                ) : review.text}
-                                                            </div>
-                                                            <div className="mt-1 flex items-center gap-4">
-                                                                <div className="text-xs text-muted-foreground truncate">User: {review.author}</div>
-                                                                {review.text.length > 100 && (
-                                                                    <button
-                                                                        onClick={() => setExpandedReviews(prev => ({ ...prev, [i]: !prev[i] }))}
-                                                                        className="text-xs text-primary font-bold hover:underline"
-                                                                    >
-                                                                        {expandedReviews[i] ? "Show less" : "Show more"}
-                                                                    </button>
-                                                                )}
-                                                            </div>
-                                                        </td>
-                                                        <td className="px-6 py-5">
-                                                            <Badge variant="secondary" className="bg-blue-500/10 text-blue-500 border-0">{review.platform}</Badge>
-                                                        </td>
-                                                        <td className="px-6 py-5 text-center">
-                                                            <div className="flex justify-center gap-0.5">
-                                                                {[1, 2, 3, 4, 5].map(s => (
-                                                                    <div key={s} className={cn("w-1.5 h-1.5 rounded-full", s <= (review.rating || 0) ? "bg-red-500" : "bg-muted")} />
-                                                                ))}
-                                                            </div>
-                                                        </td>
-                                                        <td className="px-6 py-5 text-muted-foreground">{review.date}</td>
+                                        <div className="overflow-x-auto">
+                                            <table className="w-full text-left text-sm min-w-[600px]">
+                                                <thead className="text-muted-foreground uppercase text-[10px] font-bold tracking-wider">
+                                                    <tr className="border-b bg-background/50">
+                                                        <th className="px-4 md:px-6 py-4">Review</th>
+                                                        <th className="px-4 md:px-6 py-4">Platform</th>
+                                                        <th className="px-4 md:px-6 py-4 text-center">Rating</th>
+                                                        <th className="px-4 md:px-6 py-4">Date</th>
                                                     </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
+                                                </thead>
+                                                <tbody className="divide-y divide-border/50">
+                                                    {project.recentReviews?.filter((r: any) => {
+                                                        const reviewDate = new Date(r.dateISO || r.date);
+                                                        const now = new Date();
+
+                                                        // Period Filtering
+                                                        let matchesPeriod = true;
+                                                        if (periodFilter === "today") {
+                                                            matchesPeriod = reviewDate.toDateString() === now.toDateString();
+                                                        } else if (periodFilter === "week") {
+                                                            const weekAgo = new Date();
+                                                            weekAgo.setDate(now.getDate() - 7);
+                                                            matchesPeriod = reviewDate >= weekAgo;
+                                                        } else if (periodFilter === "month") {
+                                                            const monthAgo = new Date();
+                                                            monthAgo.setMonth(now.getMonth() - 1);
+                                                            matchesPeriod = reviewDate >= monthAgo;
+                                                        }
+
+                                                        const isGood = (r.rating && r.rating >= 4) || r.sentiment === 'POS';
+                                                        const matchesType = typeFilter === "all" || (typeFilter === "good" ? isGood : !isGood);
+
+                                                        return matchesPeriod && matchesType;
+                                                    }).map((review: any, i: number) => (
+                                                        <tr key={i} className="hover:bg-accent/40 transition-colors">
+                                                            <td className="px-4 md:px-6 py-5 max-w-md">
+                                                                <div className={cn("font-medium transition-all duration-300", !expandedReviews[i] && "line-clamp-2")}>
+                                                                    {review.url ? (
+                                                                        <a href={review.url} target="_blank" rel="noopener noreferrer" className="hover:text-primary hover:underline transition-colors">
+                                                                            {review.text}
+                                                                        </a>
+                                                                    ) : review.text}
+                                                                </div>
+                                                                <div className="mt-1 flex items-center gap-4">
+                                                                    <div className="text-xs text-muted-foreground truncate">User: {review.author}</div>
+                                                                    {review.text.length > 100 && (
+                                                                        <button
+                                                                            onClick={() => setExpandedReviews(prev => ({ ...prev, [i]: !prev[i] }))}
+                                                                            className="text-xs text-primary font-bold hover:underline"
+                                                                        >
+                                                                            {expandedReviews[i] ? "Show less" : "Show more"}
+                                                                        </button>
+                                                                    )}
+                                                                </div>
+                                                            </td>
+                                                            <td className="px-4 md:px-6 py-5">
+                                                                <Badge variant="secondary" className="bg-blue-500/10 text-blue-500 border-0 md:whitespace-nowrap">{review.platform}</Badge>
+                                                            </td>
+                                                            <td className="px-4 md:px-6 py-5 text-center">
+                                                                <div className="flex justify-center gap-0.5">
+                                                                    {[1, 2, 3, 4, 5].map(s => (
+                                                                        <div key={s} className={cn("w-1.5 h-1.5 rounded-full", s <= (review.rating || 0) ? "bg-red-500" : "bg-muted")} />
+                                                                    ))}
+                                                                </div>
+                                                            </td>
+                                                            <td className="px-4 md:px-6 py-5 text-muted-foreground whitespace-nowrap">{review.date}</td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                             )}

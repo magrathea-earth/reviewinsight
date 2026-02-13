@@ -33,28 +33,7 @@ export function NewProjectModal({ isOpen, onClose, onCreate }: NewProjectModalPr
             ),
             color: "bg-green-500"
         },
-        {
-            id: "instagram",
-            name: "Instagram",
-            logo: (
-                <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="2" y="2" width="20" height="20" rx="5" />
-                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
-                </svg>
-            ),
-            color: "bg-pink-500"
-        },
-        {
-            id: "twitter",
-            name: "X (Twitter)",
-            logo: (
-                <svg viewBox="0 0 24 24" className="w-4 h-4" fill="currentColor">
-                    <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932L18.901 1.153ZM17.61 20.644h2.039L6.486 3.24H4.298L17.61 20.644Z" />
-                </svg>
-            ),
-            color: "bg-slate-900"
-        },
+        /* */
         {
             id: "apple",
             name: "App Store",

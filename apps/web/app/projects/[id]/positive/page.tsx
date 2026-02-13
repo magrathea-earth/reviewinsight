@@ -40,52 +40,52 @@ export default function PositiveStoriesPage({ params }: { params: { id: string }
     const bullets = praises.bullets || [];
 
     return (
-        <div className="flex min-h-screen bg-background">
+        <div className="flex flex-col md:flex-row min-h-screen bg-background">
             <Sidebar />
 
-            <main className="flex-1 overflow-y-auto px-10 py-12">
-                <header className="mb-10">
+            <main className="flex-1 overflow-y-auto px-4 py-8 md:px-10 md:py-12">
+                <header className="mb-8 md:mb-10">
                     <div className="text-xs font-bold text-primary uppercase tracking-widest mb-1">{project.name}</div>
-                    <h1 className="text-4xl font-bold tracking-tight mb-4">Positive Stories</h1>
-                    <div className="bg-green-500/5 border border-green-500/20 rounded-2xl p-6 relative overflow-hidden">
+                    <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">Positive Stories</h1>
+                    <div className="bg-green-500/5 border border-green-500/20 rounded-2xl p-4 md:p-6 relative overflow-hidden">
                         <div className="absolute top-0 right-0 p-6 opacity-10">
                             <PartyPopper className="w-12 h-12 text-green-500" />
                         </div>
                         <h2 className="text-sm font-bold uppercase tracking-wider text-green-600 mb-2 flex items-center gap-2">
                             <Sparkles className="w-4 h-4" /> Why Users Love {project.name}
                         </h2>
-                        <p className="text-xl font-medium leading-relaxed text-foreground max-w-3xl">
+                        <p className="text-lg md:text-xl font-medium leading-relaxed text-foreground max-w-3xl">
                             {praises.summary}
                         </p>
                     </div>
                 </header>
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
-                    <div className="bg-accent/10 border p-6 rounded-2xl flex flex-col gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 mb-12">
+                    <div className="bg-accent/10 border p-4 md:p-6 rounded-2xl flex flex-col gap-4">
                         <div className="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center">
                             <TrendingUp className="w-5 h-5 text-green-500" />
                         </div>
                         <div>
                             <div className="text-sm font-medium text-muted-foreground">Top Praise</div>
-                            <div className="text-xl font-bold mt-1 text-green-600">{bullets[0]?.title || "N/A"}</div>
+                            <div className="text-lg md:text-xl font-bold mt-1 text-green-600">{bullets[0]?.title || "N/A"}</div>
                         </div>
                     </div>
-                    <div className="bg-accent/10 border p-6 rounded-2xl flex flex-col gap-4">
+                    <div className="bg-accent/10 border p-4 md:p-6 rounded-2xl flex flex-col gap-4">
                         <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
                             <PartyPopper className="w-5 h-5 text-primary" />
                         </div>
                         <div>
                             <div className="text-sm font-medium text-muted-foreground">Biggest Win</div>
-                            <div className="text-xl font-bold mt-1">{bullets[1]?.title || "N/A"}</div>
+                            <div className="text-lg md:text-xl font-bold mt-1">{bullets[1]?.title || "N/A"}</div>
                         </div>
                     </div>
-                    <div className="bg-accent/10 border p-6 rounded-2xl flex flex-col gap-4">
+                    <div className="bg-accent/10 border p-4 md:p-6 rounded-2xl flex flex-col gap-4">
                         <div className="w-10 h-10 rounded-full bg-yellow-500/10 flex items-center justify-center">
                             <Zap className="w-5 h-5 text-yellow-500" />
                         </div>
                         <div>
                             <div className="text-sm font-medium text-muted-foreground">Growth Driver</div>
-                            <div className="text-xl font-bold mt-1 text-yellow-600">{bullets[2]?.title || "N/A"}</div>
+                            <div className="text-lg md:text-xl font-bold mt-1 text-yellow-600">{bullets[2]?.title || "N/A"}</div>
                         </div>
                     </div>
                 </div>

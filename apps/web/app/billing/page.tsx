@@ -31,41 +31,41 @@ export default function BillingPage() {
     ];
 
     return (
-        <div className="flex min-h-screen bg-background">
+        <div className="flex flex-col md:flex-row min-h-screen bg-background">
             <Sidebar />
 
-            <main className="flex-1 overflow-y-auto px-10 py-12">
-                <header className="mb-12">
-                    <h1 className="text-4xl font-bold tracking-tight">Billing & Plans</h1>
-                    <p className="text-muted-foreground mt-2">Manage your subscription and usage limits.</p>
+            <main className="flex-1 overflow-y-auto px-4 py-8 md:px-10 md:py-12">
+                <header className="mb-8 md:mb-12">
+                    <h1 className="text-3xl md:text-4xl font-bold tracking-tight">Billing & Plans</h1>
+                    <p className="text-muted-foreground mt-2 text-sm md:text-base">Manage your subscription and usage limits.</p>
                 </header>
 
-                <section className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
+                <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-12 md:mb-16">
                     {plans.map((plan) => (
                         <div
                             key={plan.name}
                             className={cn(
-                                "relative flex flex-col p-8 rounded-3xl border transition-all",
+                                "relative flex flex-col p-6 md:p-8 rounded-3xl border transition-all",
                                 plan.current ? "border-primary shadow-lg ring-1 ring-primary/20" : "bg-card hover:border-sidebar-accent"
                             )}
                         >
                             {plan.popular && (
-                                <div className="absolute top-0 right-8 -translate-y-1/2">
-                                    <Badge className="bg-primary text-primary-foreground px-3 py-1 font-bold">MOST POPULAR</Badge>
+                                <div className="absolute top-0 right-6 md:right-8 -translate-y-1/2">
+                                    <Badge className="bg-primary text-primary-foreground px-3 py-1 font-bold text-xs md:text-sm">MOST POPULAR</Badge>
                                 </div>
                             )}
 
-                            <div className="mb-8">
+                            <div className="mb-6 md:mb-8">
                                 <h3 className="text-xl font-bold">{plan.name}</h3>
                                 <p className="text-sm text-muted-foreground mt-2 min-h-[40px]">{plan.description}</p>
                             </div>
 
-                            <div className="mb-8">
-                                <span className="text-4xl font-bold">{plan.price}</span>
+                            <div className="mb-6 md:mb-8">
+                                <span className="text-3xl md:text-4xl font-bold">{plan.price}</span>
                                 {plan.price !== "Custom" && <span className="text-muted-foreground font-medium">/month</span>}
                             </div>
 
-                            <ul className="space-y-4 mb-10 flex-1 text-sm">
+                            <ul className="space-y-3 md:space-y-4 mb-8 md:mb-10 flex-1 text-sm">
                                 {plan.features.map((feature) => (
                                     <li key={feature} className="flex items-center gap-3">
                                         <div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
@@ -78,7 +78,7 @@ export default function BillingPage() {
 
                             <Button
                                 variant={plan.current ? "outline" : "premium"}
-                                className="w-full h-12 text-md font-bold"
+                                className="w-full h-10 md:h-12 text-sm md:text-md font-bold"
                                 disabled={plan.current}
                             >
                                 {plan.current ? "Current Plan" : "Upgrade Now"}
@@ -88,9 +88,9 @@ export default function BillingPage() {
                 </section>
 
                 <section className="max-w-4xl">
-                    <h2 className="text-xl font-bold mb-6">Usage Summary</h2>
-                    <div className="bg-accent/20 rounded-2xl p-8 border border-dashed">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    <h2 className="text-xl font-bold mb-4 md:mb-6">Usage Summary</h2>
+                    <div className="bg-accent/20 rounded-2xl p-6 md:p-8 border border-dashed">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
                             <div>
                                 <div className="flex justify-between items-end mb-3">
                                     <span className="text-sm font-medium">Monthly Review Limit</span>
@@ -104,18 +104,18 @@ export default function BillingPage() {
                                 </p>
                             </div>
 
-                            <div className="flex items-center gap-6">
-                                <div className="w-12 h-12 rounded-2xl bg-card border flex items-center justify-center shadow-sm">
+                            <div className="flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-6">
+                                <div className="w-12 h-12 rounded-2xl bg-card border flex items-center justify-center shadow-sm shrink-0">
                                     <CreditCard className="w-6 h-6 text-muted-foreground" />
                                 </div>
-                                <div>
+                                <div className="flex-1">
                                     <p className="font-bold flex items-center gap-2">
                                         Visa ending in 4242
                                         <Badge variant="outline" className="text-[10px] font-bold">Default</Badge>
                                     </p>
                                     <p className="text-sm text-muted-foreground">Expires 12/28</p>
                                 </div>
-                                <Button variant="ghost" size="sm" className="ml-auto">Update</Button>
+                                <Button variant="ghost" size="sm" className="w-full md:w-auto ml-auto">Update</Button>
                             </div>
                         </div>
                     </div>

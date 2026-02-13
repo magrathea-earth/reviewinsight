@@ -35,9 +35,7 @@ export async function GET() {
         sources: p.sources.map(s => ({
             platform: s.platform,
             name: s.platform === 'GOOGLE_PLAY' ? 'Google Play' :
-                s.platform === 'APP_STORE' ? 'App Store' :
-                    s.platform === 'INSTAGRAM' ? 'Instagram' :
-                        s.platform === 'X' ? 'X' : s.platform
+                s.platform === 'APP_STORE' ? 'App Store' : s.platform
         })),
         lastSync: p.sources[0]?.lastSync ? new Date(p.sources[0].lastSync).toLocaleString() : "Never"
     }));
@@ -91,13 +89,13 @@ export async function POST(req: NextRequest) {
     console.log(`[API] Checking limits for Org: ${orgId}, Plan: ${org?.plan}, Project Count: ${projectCount}`);
 
     // If plan is STARTER or undefined/null (default to starter), enforce limit
-    const isFreePlan = !org?.subscriptionStatus || org.subscriptionStatus === "FREE";
+    const isFreePlan = !org?.plan || org.plan === "STARTER";
 
     if (isFreePlan && projectCount >= 1) {
         return NextResponse.json({
             error: "Free Plan Limit Reached",
             code: "LIMIT_REACHED",
-            message: "You are currently on the Free Plan. Upgrade to create additional projects."
+            message: "You can only create 1 project on the Free Plan. Please upgrade to Pro to add more."
         }, { status: 403 });
     }
 

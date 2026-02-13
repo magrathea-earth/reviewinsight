@@ -62,7 +62,7 @@ model Organization {
   updatedAt        DateTime           @updatedAt
   stripeCustomerId String?            @unique
   subscriptionId   String?
-  subscriptionStatus String @default("FREE")
+  subscriptionStatus String?
   plan             Plan               @default(STARTER)
   projects         Project[]
   users            UserOrganization[]

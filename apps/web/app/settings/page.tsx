@@ -17,24 +17,24 @@ export default function SettingsPage() {
     const userInitials = userName.split(" ").map(n => n[0]).join("").slice(0, 2).toUpperCase();
 
     return (
-        <div className="flex min-h-screen bg-background">
+        <div className="flex flex-col md:flex-row min-h-screen bg-background">
             <Sidebar />
 
-            <main className="flex-1 overflow-y-auto">
-                <div className="max-w-5xl mx-auto px-10 py-12">
-                    <header className="mb-12">
-                        <h1 className="text-4xl font-bold tracking-tight">Settings</h1>
-                        <p className="text-muted-foreground mt-2">Manage your account preferences.</p>
+            <main className="flex-1 overflow-y-auto px-4 py-8 md:px-10 md:py-12">
+                <div className="max-w-5xl mx-auto md:px-10">
+                    <header className="mb-8 md:mb-12">
+                        <h1 className="text-3xl md:text-4xl font-bold tracking-tight">Settings</h1>
+                        <p className="text-muted-foreground mt-2 text-sm md:text-base">Manage your account preferences.</p>
                     </header>
 
-                    <div className="flex gap-12">
-                        <aside className="w-48 shrink-0">
-                            <nav className="flex flex-col gap-1">
+                    <div className="flex flex-col md:flex-row gap-6 md:gap-12">
+                        <aside className="w-full md:w-48 shrink-0">
+                            <nav className="flex md:flex-col gap-2 overflow-x-auto pb-2 md:pb-0">
                                 {sections.map((section, i) => (
                                     <button
                                         key={section.name}
                                         className={cn(
-                                            "flex items-center gap-3 px-4 py-2 rounded-xl text-sm font-medium transition-all text-left",
+                                            "flex items-center gap-3 px-4 py-2 rounded-xl text-sm font-medium transition-all text-left whitespace-nowrap md:whitespace-normal",
                                             i === 0 ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:bg-accent"
                                         )}
                                     >
@@ -45,17 +45,17 @@ export default function SettingsPage() {
                             </nav>
                         </aside>
 
-                        <div className="flex-1 space-y-12">
+                        <div className="flex-1 space-y-8 md:space-y-12">
                             <section>
                                 <h2 className="text-xl font-bold mb-6">User Profile</h2>
                                 <div className="space-y-6">
                                     <div className="flex items-center gap-6 pb-6 border-b">
-                                        <div className="w-20 h-20 rounded-3xl bg-accent flex items-center justify-center text-2xl font-bold text-primary">
+                                        <div className="w-16 h-16 md:w-20 md:h-20 rounded-3xl bg-accent flex items-center justify-center text-xl md:text-2xl font-bold text-primary">
                                             {userInitials}
                                         </div>
                                     </div>
 
-                                    <div className="grid grid-cols-2 gap-6">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         <div className="space-y-2">
                                             <label className="text-sm font-bold">Full Name</label>
                                             <div className="w-full bg-accent/30 border border-transparent rounded-xl px-4 py-2.5 text-sm">
@@ -73,7 +73,7 @@ export default function SettingsPage() {
                             </section>
 
                             <div className="pt-6 border-t flex justify-end gap-3">
-                                <Button className="premium px-8">Save Changes</Button>
+                                <Button className="premium px-8 w-full md:w-auto">Save Changes</Button>
                             </div>
                         </div>
                     </div>

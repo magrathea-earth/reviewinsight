@@ -41,52 +41,52 @@ export default function ProjectInsightsPage({ params }: { params: { id: string }
     const suggestions = criticisms.suggestions || [];
 
     return (
-        <div className="flex min-h-screen bg-background">
+        <div className="flex flex-col md:flex-row min-h-screen bg-background">
             <Sidebar />
 
-            <main className="flex-1 overflow-y-auto px-10 py-12">
-                <header className="mb-10">
+            <main className="flex-1 overflow-y-auto px-4 py-8 md:px-10 md:py-12">
+                <header className="mb-8 md:mb-10">
                     <div className="text-xs font-bold text-primary uppercase tracking-widest mb-1">{project.name}</div>
-                    <h1 className="text-4xl font-bold tracking-tight mb-4">AI Insights</h1>
-                    <div className="bg-primary/5 border border-primary/20 rounded-2xl p-6 relative overflow-hidden">
+                    <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">AI Insights</h1>
+                    <div className="bg-primary/5 border border-primary/20 rounded-2xl p-4 md:p-6 relative overflow-hidden">
                         <div className="absolute top-0 right-0 p-6 opacity-10">
                             <Sparkles className="w-12 h-12 text-primary" />
                         </div>
                         <h2 className="text-sm font-bold uppercase tracking-wider text-primary mb-2 flex items-center gap-2">
                             <Zap className="w-4 h-4" /> AI Executive Summary
                         </h2>
-                        <p className="text-xl font-medium leading-relaxed text-foreground max-w-3xl">
+                        <p className="text-lg md:text-xl font-medium leading-relaxed text-foreground max-w-3xl">
                             {criticisms.summary}
                         </p>
                     </div>
                 </header>
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
-                    <div className="bg-accent/10 border p-6 rounded-2xl flex flex-col gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 mb-12">
+                    <div className="bg-accent/10 border p-4 md:p-6 rounded-2xl flex flex-col gap-4">
                         <div className="w-10 h-10 rounded-full bg-red-500/10 flex items-center justify-center">
                             <TrendingDown className="w-5 h-5 text-red-500" />
                         </div>
                         <div>
                             <div className="text-sm font-medium text-muted-foreground">Top Complaint</div>
-                            <div className="text-xl font-bold mt-1 text-red-500">{bullets[0]?.title || "N/A"}</div>
+                            <div className="text-lg md:text-xl font-bold mt-1 text-red-500">{bullets[0]?.title || "N/A"}</div>
                         </div>
                     </div>
-                    <div className="bg-accent/10 border p-6 rounded-2xl flex flex-col gap-4">
+                    <div className="bg-accent/10 border p-4 md:p-6 rounded-2xl flex flex-col gap-4">
                         <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
                             <Target className="w-5 h-5 text-primary" />
                         </div>
                         <div>
                             <div className="text-sm font-medium text-muted-foreground">Improvement Focus</div>
-                            <div className="text-xl font-bold mt-1">{bullets[1]?.title || "N/A"}</div>
+                            <div className="text-lg md:text-xl font-bold mt-1">{bullets[1]?.title || "N/A"}</div>
                         </div>
                     </div>
-                    <div className="bg-accent/10 border p-6 rounded-2xl flex flex-col gap-4">
+                    <div className="bg-accent/10 border p-4 md:p-6 rounded-2xl flex flex-col gap-4">
                         <div className="w-10 h-10 rounded-full bg-yellow-500/10 flex items-center justify-center">
                             <Zap className="w-5 h-5 text-yellow-500" />
                         </div>
                         <div>
                             <div className="text-sm font-medium text-muted-foreground">Quick Win</div>
-                            <div className="text-xl font-bold mt-1 text-yellow-600">{bullets[2]?.title || "N/A"}</div>
+                            <div className="text-lg md:text-xl font-bold mt-1 text-yellow-600">{bullets[2]?.title || "N/A"}</div>
                         </div>
                     </div>
                 </div>
@@ -98,7 +98,7 @@ export default function ProjectInsightsPage({ params }: { params: { id: string }
                     </div>
 
                     {bullets.length > 0 ? (
-                        <div className="grid gap-6">
+                        <div className="grid gap-4 md:gap-6">
                             {bullets.map((bullet: any, i: number) => (
                                 <div key={i} className="bg-accent/5 border rounded-2xl overflow-hidden hover:border-primary/30 transition-colors">
                                     <InsightBullet {...bullet} />
@@ -120,7 +120,7 @@ export default function ProjectInsightsPage({ params }: { params: { id: string }
                         </div>
 
                         {suggestions.length > 0 ? (
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                 {suggestions.map((s: string, i: number) => (
                                     <div key={i} className="relative group bg-primary/5 hover:bg-primary/10 border border-primary/20 rounded-2xl p-6 transition-all duration-300">
                                         <div className="absolute -top-3 -right-3 w-8 h-8 bg-background border border-primary/20 rounded-full flex items-center justify-center text-xs font-black shadow-sm group-hover:scale-110 transition-transform">
