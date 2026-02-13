@@ -74,9 +74,9 @@ export function NewProjectModal({ isOpen, onClose, onCreate }: NewProjectModalPr
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.95, y: 20 }}
                             onClick={(e) => e.stopPropagation()}
-                            className="w-full max-w-[500px] bg-background rounded-[32px] shadow-2xl z-[110] border overflow-hidden max-h-[90vh] flex flex-col"
+                            className="w-full max-w-[500px] bg-background rounded-[24px] md:rounded-[32px] shadow-2xl z-[110] border overflow-hidden max-h-[90vh] flex flex-col"
                         >
-                            <div className="p-8 overflow-y-auto">
+                            <div className="p-5 md:p-8 overflow-y-auto">
                                 <header className="flex items-center justify-between mb-8">
                                     <div>
                                         <h2 className="text-2xl font-bold tracking-tight">Create Project</h2>

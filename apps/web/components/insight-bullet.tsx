@@ -24,25 +24,25 @@ export function InsightBullet({ title, details, count, platforms, examples, tren
                 className="py-6 cursor-pointer flex items-start justify-between gap-4"
                 onClick={() => setIsExpanded(!isExpanded)}
             >
-                <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-1">
-                        <h3 className="text-lg font-semibold tracking-tight">{title}</h3>
+                <div className="flex-1 min-w-0">
+                    <div className="flex flex-wrap items-center gap-2 mb-1">
+                        <h3 className="text-base md:text-lg font-semibold tracking-tight truncate">{title}</h3>
                         {trend === "up" && (
-                            <Badge variant="destructive" className="gap-1 bg-red-500/10 text-red-500 border-0">
+                            <Badge variant="destructive" className="gap-1 bg-red-500/10 text-red-500 border-0 text-[10px] px-1.5 py-0">
                                 <TrendingUp className="w-3 h-3" /> Spiking
                             </Badge>
                         )}
                     </div>
-                    <p className="text-muted-foreground text-sm max-w-2xl">{details}</p>
+                    <p className="text-muted-foreground text-sm max-w-2xl text-pretty">{details}</p>
 
-                    <div className="flex items-center gap-4 mt-4 text-xs text-muted-foreground">
+                    <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mt-4 text-[10px] md:text-xs text-muted-foreground">
                         <div className="flex items-center gap-1.5">
                             <MessageSquare className="w-3.5 h-3.5" />
-                            <span>Mentioned by {count} users</span>
+                            <span>{count} users</span>
                         </div>
                         <div className="flex gap-2">
                             {platforms?.map(p => (
-                                <span key={p} className="px-1.5 py-0.5 bg-accent rounded uppercase text-[10px] font-bold tracking-wider">
+                                <span key={p} className="px-1.5 py-0.5 bg-accent rounded uppercase font-bold tracking-wider shrink-0">
                                     {p}
                                 </span>
                             ))}

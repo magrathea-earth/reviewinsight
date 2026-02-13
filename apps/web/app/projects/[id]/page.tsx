@@ -115,21 +115,22 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
 
             <main className="flex-1 overflow-y-auto px-4 py-8 md:px-10 md:py-12">
                 <header className="flex flex-col md:flex-row md:items-center justify-between mb-8 md:mb-12 gap-6 md:gap-0">
-                    <div className="text-center md:text-left">
-                        <div className="flex items-center justify-center md:justify-start gap-2 mb-1">
+                    <div className="text-left">
+                        <div className="flex items-center gap-2 mb-1">
                             <span className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wider">Project</span>
                         </div>
-                        <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4">
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
                             <h1 className="text-3xl md:text-4xl font-bold tracking-tight">{project.name}</h1>
-                            {getPlatformDisplay(project.sources)}
+                            <div className="flex">
+                                {getPlatformDisplay(project.sources)}
+                            </div>
                         </div>
                         <div className="text-muted-foreground mt-2 text-sm md:text-base">Customer sentiment across all platforms.</div>
                     </div>
 
-                    <div className="flex items-center justify-center md:justify-end gap-3 w-full md:w-auto">
-
+                    <div className="flex items-center gap-3 w-full sm:w-auto">
                         <Button
-                            className="gap-2 premium w-full md:w-auto"
+                            className="gap-2 premium w-full sm:w-auto"
                             onClick={async () => {
                                 try {
                                     const res = await fetch('/api/sync', {
@@ -157,12 +158,15 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
                 </header>
 
                 {/* KPI Row */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8 mb-12 md:mb-16">
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-8 mb-12 md:mb-16">
                     {stats.map((stat: any, i: number) => (
-                        <div key={i} className="flex flex-col p-4 md:p-0 bg-accent/20 md:bg-transparent rounded-xl md:rounded-none">
-                            <span className="text-sm text-muted-foreground mb-1 font-medium">{stat.label}</span>
-                            <span className={cn("text-3xl font-bold tracking-tight", stat.color)}>{stat.value}</span>
-                            <span className="text-xs text-muted-foreground mt-1.5 flex items-center gap-1">
+                        <div key={i} className={cn(
+                            "flex flex-col p-4 bg-accent/10 border rounded-xl md:p-0 md:bg-transparent md:border-0 md:rounded-none",
+                            i === 2 && "col-span-2 md:col-span-1" // Last KPI spans 2 cols on mobile
+                        )}>
+                            <span className="text-xs md:text-sm text-muted-foreground mb-1 font-medium">{stat.label}</span>
+                            <span className={cn("text-2xl md:text-3xl font-bold tracking-tight", stat.color)}>{stat.value}</span>
+                            <span className="text-[10px] md:text-xs text-muted-foreground mt-1.5 flex items-center gap-1">
                                 {stat.sub}
                             </span>
                         </div>
@@ -183,35 +187,35 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className={cn(
-                                    "block relative group overflow-hidden bg-accent/30 border border-primary/20 rounded-xl px-5 py-4 shadow-sm transition-all duration-300",
+                                    "block relative group overflow-hidden bg-accent/30 border border-primary/20 rounded-xl px-4 py-4 md:px-5 md:py-4 shadow-sm transition-all duration-300",
                                     project.recentReviews[0].url ? "hover:bg-accent/50 hover:border-primary/40 cursor-pointer" : "cursor-default"
                                 )}
                             >
                                 <div className="absolute top-0 right-0 p-3 opacity-5 group-hover:opacity-10 transition-opacity">
                                     <Quote className="w-8 h-8 rotate-180" />
                                 </div>
-                                <div className="relative z-10">
+                                <div className="relative z-10 text-pretty">
                                     <div className="flex items-center gap-1.5 mb-2 text-primary">
                                         {[1, 2, 3, 4, 5].map(s => (
                                             <div key={s} className={cn("w-1 h-1 rounded-full", s <= (project.recentReviews[0].rating || 0) ? "bg-primary" : "bg-primary/20")} />
                                         ))}
                                         <span className="text-[9px] font-bold ml-1 uppercase tracking-widest">{project.recentReviews[0].platform}</span>
                                     </div>
-                                    <p className="text-sm mb-3 leading-snug text-foreground/90 font-medium italic">
+                                    <p className="text-sm mb-3 leading-relaxed text-foreground/90 font-medium italic">
                                         "{project.recentReviews[0].text}"
                                     </p>
-                                    <div className="flex items-center justify-between gap-2">
+                                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                                         <div className="flex items-center gap-2">
                                             <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center border border-primary/20">
                                                 <User className="w-3 h-3 text-primary" />
                                             </div>
-                                            <div className="flex items-center gap-2">
-                                                <div className="font-bold text-xs">{project.recentReviews[0].author}</div>
-                                                <div className="text-[10px] text-muted-foreground">• {project.recentReviews[0].date}</div>
+                                            <div className="flex items-center gap-2 overflow-hidden">
+                                                <div className="font-bold text-xs truncate">{project.recentReviews[0].author}</div>
+                                                <div className="text-[10px] text-muted-foreground shrink-0">• {project.recentReviews[0].date}</div>
                                             </div>
                                         </div>
                                         {project.recentReviews[0].url && (
-                                            <ArrowUpRight className="w-3 h-3 text-muted-foreground group-hover:text-primary transition-colors" />
+                                            <ArrowUpRight className="hidden sm:block w-3 h-3 text-muted-foreground group-hover:text-primary transition-colors" />
                                         )}
                                     </div>
                                 </div>
@@ -221,7 +225,7 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
                             <div className="flex flex-col items-center gap-4 pt-4">
                                 <Button
                                     variant="ghost"
-                                    className="gap-2 text-muted-foreground hover:text-primary group w-full md:w-auto"
+                                    className="gap-2 text-muted-foreground hover:text-primary group w-full sm:w-auto"
                                     onClick={() => setShowAllReviews(!showAllReviews)}
                                 >
                                     <span>{showAllReviews ? "Hide all reviews" : "See all fetched reviews"}</span>
@@ -231,12 +235,12 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
 
                             {showAllReviews && (
                                 <div className="space-y-4 animate-in fade-in slide-in-from-top-4 duration-500">
-                                    <div className="flex flex-col md:flex-row flex-wrap items-stretch md:items-center justify-end gap-3 px-4 py-3 bg-accent/5 border rounded-xl">
-                                        <div className="flex items-center gap-2 text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-2 md:mb-0">
+                                    <div className="flex flex-col md:flex-row flex-wrap items-stretch md:items-center justify-end gap-3 px-3 py-3 md:px-4 md:py-3 bg-accent/5 border rounded-xl">
+                                        <div className="flex items-center gap-2 text-[10px] font-bold text-muted-foreground uppercase tracking-wider">
                                             <Filter className="w-3 h-3" /> Filters:
                                         </div>
 
-                                        <div className="flex bg-background border rounded-lg p-0.5 overflow-x-auto">
+                                        <div className="flex bg-background border rounded-lg p-0.5 overflow-x-auto no-scrollbar">
                                             {[
                                                 { label: "All", value: "all" },
                                                 { label: "Today", value: "today" },
@@ -279,78 +283,132 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
                                         )}
                                     </div>
 
-                                    <div className="bg-accent/10 rounded-2xl overflow-hidden border">
-                                        <div className="overflow-x-auto">
-                                            <table className="w-full text-left text-sm min-w-[600px]">
-                                                <thead className="text-muted-foreground uppercase text-[10px] font-bold tracking-wider">
-                                                    <tr className="border-b bg-background/50">
-                                                        <th className="px-4 md:px-6 py-4">Review</th>
-                                                        <th className="px-4 md:px-6 py-4">Platform</th>
-                                                        <th className="px-4 md:px-6 py-4 text-center">Rating</th>
-                                                        <th className="px-4 md:px-6 py-4">Date</th>
+                                    {/* Desktop Table View */}
+                                    <div className="hidden lg:block bg-accent/10 rounded-2xl overflow-hidden border">
+                                        <table className="w-full text-left text-sm">
+                                            <thead className="text-muted-foreground uppercase text-[10px] font-bold tracking-wider">
+                                                <tr className="border-b bg-background/50">
+                                                    <th className="px-6 py-4">Review</th>
+                                                    <th className="px-6 py-4">Platform</th>
+                                                    <th className="px-6 py-4 text-center">Rating</th>
+                                                    <th className="px-6 py-4">Date</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody className="divide-y divide-border/50">
+                                                {project.recentReviews?.filter((r: any) => {
+                                                    const reviewDate = new Date(r.dateISO || r.date);
+                                                    const now = new Date();
+
+                                                    // Period Filtering
+                                                    let matchesPeriod = true;
+                                                    if (periodFilter === "today") {
+                                                        matchesPeriod = reviewDate.toDateString() === now.toDateString();
+                                                    } else if (periodFilter === "week") {
+                                                        const weekAgo = new Date();
+                                                        weekAgo.setDate(now.getDate() - 7);
+                                                        matchesPeriod = reviewDate >= weekAgo;
+                                                    } else if (periodFilter === "month") {
+                                                        const monthAgo = new Date();
+                                                        monthAgo.setMonth(now.getMonth() - 1);
+                                                        matchesPeriod = reviewDate >= monthAgo;
+                                                    }
+
+                                                    const isGood = (r.rating && r.rating >= 4) || r.sentiment === 'POS';
+                                                    const matchesType = typeFilter === "all" || (typeFilter === "good" ? isGood : !isGood);
+
+                                                    return matchesPeriod && matchesType;
+                                                }).map((review: any, i: number) => (
+                                                    <tr key={i} className="hover:bg-accent/40 transition-colors">
+                                                        <td className="px-6 py-5 max-w-md">
+                                                            <div className={cn("font-medium transition-all duration-300", !expandedReviews[i] && "line-clamp-2")}>
+                                                                {review.url ? (
+                                                                    <a href={review.url} target="_blank" rel="noopener noreferrer" className="hover:text-primary hover:underline transition-colors">
+                                                                        {review.text}
+                                                                    </a>
+                                                                ) : review.text}
+                                                            </div>
+                                                            <div className="mt-1 flex items-center gap-4 text-xs text-muted-foreground">
+                                                                <span>User: {review.author}</span>
+                                                                {review.text.length > 100 && (
+                                                                    <button
+                                                                        onClick={() => setExpandedReviews(prev => ({ ...prev, [i]: !prev[i] }))}
+                                                                        className="text-primary font-bold hover:underline"
+                                                                    >
+                                                                        {expandedReviews[i] ? "Show less" : "Show more"}
+                                                                    </button>
+                                                                )}
+                                                            </div>
+                                                        </td>
+                                                        <td className="px-6 py-5">
+                                                            <Badge variant="secondary" className="bg-blue-500/10 text-blue-500 border-0">{review.platform}</Badge>
+                                                        </td>
+                                                        <td className="px-6 py-5 text-center">
+                                                            <div className="flex justify-center gap-0.5">
+                                                                {[1, 2, 3, 4, 5].map(s => (
+                                                                    <div key={s} className={cn("w-1.5 h-1.5 rounded-full", s <= (review.rating || 0) ? "bg-red-500" : "bg-muted")} />
+                                                                ))}
+                                                            </div>
+                                                        </td>
+                                                        <td className="px-6 py-5 text-muted-foreground whitespace-nowrap">{review.date}</td>
                                                     </tr>
-                                                </thead>
-                                                <tbody className="divide-y divide-border/50">
-                                                    {project.recentReviews?.filter((r: any) => {
-                                                        const reviewDate = new Date(r.dateISO || r.date);
-                                                        const now = new Date();
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
 
-                                                        // Period Filtering
-                                                        let matchesPeriod = true;
-                                                        if (periodFilter === "today") {
-                                                            matchesPeriod = reviewDate.toDateString() === now.toDateString();
-                                                        } else if (periodFilter === "week") {
-                                                            const weekAgo = new Date();
-                                                            weekAgo.setDate(now.getDate() - 7);
-                                                            matchesPeriod = reviewDate >= weekAgo;
-                                                        } else if (periodFilter === "month") {
-                                                            const monthAgo = new Date();
-                                                            monthAgo.setMonth(now.getMonth() - 1);
-                                                            matchesPeriod = reviewDate >= monthAgo;
-                                                        }
+                                    {/* Mobile/Tablet Card View */}
+                                    <div className="lg:hidden space-y-4">
+                                        {project.recentReviews?.filter((r: any) => {
+                                            const reviewDate = new Date(r.dateISO || r.date);
+                                            const now = new Date();
 
-                                                        const isGood = (r.rating && r.rating >= 4) || r.sentiment === 'POS';
-                                                        const matchesType = typeFilter === "all" || (typeFilter === "good" ? isGood : !isGood);
+                                            // Period Filtering
+                                            let matchesPeriod = true;
+                                            if (periodFilter === "today") {
+                                                matchesPeriod = reviewDate.toDateString() === now.toDateString();
+                                            } else if (periodFilter === "week") {
+                                                const weekAgo = new Date();
+                                                weekAgo.setDate(now.getDate() - 7);
+                                                matchesPeriod = reviewDate >= weekAgo;
+                                            } else if (periodFilter === "month") {
+                                                const monthAgo = new Date();
+                                                monthAgo.setMonth(now.getMonth() - 1);
+                                                matchesPeriod = reviewDate >= monthAgo;
+                                            }
 
-                                                        return matchesPeriod && matchesType;
-                                                    }).map((review: any, i: number) => (
-                                                        <tr key={i} className="hover:bg-accent/40 transition-colors">
-                                                            <td className="px-4 md:px-6 py-5 max-w-md">
-                                                                <div className={cn("font-medium transition-all duration-300", !expandedReviews[i] && "line-clamp-2")}>
-                                                                    {review.url ? (
-                                                                        <a href={review.url} target="_blank" rel="noopener noreferrer" className="hover:text-primary hover:underline transition-colors">
-                                                                            {review.text}
-                                                                        </a>
-                                                                    ) : review.text}
-                                                                </div>
-                                                                <div className="mt-1 flex items-center gap-4">
-                                                                    <div className="text-xs text-muted-foreground truncate">User: {review.author}</div>
-                                                                    {review.text.length > 100 && (
-                                                                        <button
-                                                                            onClick={() => setExpandedReviews(prev => ({ ...prev, [i]: !prev[i] }))}
-                                                                            className="text-xs text-primary font-bold hover:underline"
-                                                                        >
-                                                                            {expandedReviews[i] ? "Show less" : "Show more"}
-                                                                        </button>
-                                                                    )}
-                                                                </div>
-                                                            </td>
-                                                            <td className="px-4 md:px-6 py-5">
-                                                                <Badge variant="secondary" className="bg-blue-500/10 text-blue-500 border-0 md:whitespace-nowrap">{review.platform}</Badge>
-                                                            </td>
-                                                            <td className="px-4 md:px-6 py-5 text-center">
-                                                                <div className="flex justify-center gap-0.5">
-                                                                    {[1, 2, 3, 4, 5].map(s => (
-                                                                        <div key={s} className={cn("w-1.5 h-1.5 rounded-full", s <= (review.rating || 0) ? "bg-red-500" : "bg-muted")} />
-                                                                    ))}
-                                                                </div>
-                                                            </td>
-                                                            <td className="px-4 md:px-6 py-5 text-muted-foreground whitespace-nowrap">{review.date}</td>
-                                                        </tr>
-                                                    ))}
-                                                </tbody>
-                                            </table>
-                                        </div>
+                                            const isGood = (r.rating && r.rating >= 4) || r.sentiment === 'POS';
+                                            const matchesType = typeFilter === "all" || (typeFilter === "good" ? isGood : !isGood);
+
+                                            return matchesPeriod && matchesType;
+                                        }).map((review: any, i: number) => (
+                                            <div key={i} className="bg-card border rounded-xl px-4 py-4 space-y-3">
+                                                <div className="flex items-center justify-between">
+                                                    <div className="flex gap-0.5">
+                                                        {[1, 2, 3, 4, 5].map(s => (
+                                                            <div key={s} className={cn("w-1.5 h-1.5 rounded-full", s <= (review.rating || 0) ? "bg-red-500" : "bg-muted")} />
+                                                        ))}
+                                                    </div>
+                                                    <span className="text-[10px] text-muted-foreground font-medium uppercase">{review.date}</span>
+                                                </div>
+                                                <div className={cn("text-sm leading-relaxed", !expandedReviews[i] && "line-clamp-3")}>
+                                                    {review.text}
+                                                </div>
+                                                <div className="flex items-center justify-between pt-2">
+                                                    <div className="flex items-center gap-2">
+                                                        <Badge variant="secondary" className="bg-blue-500/10 text-blue-500 border-0 text-[9px] px-1.5 py-0">{review.platform}</Badge>
+                                                        <span className="text-[10px] text-muted-foreground truncate max-w-[100px]">{review.author}</span>
+                                                    </div>
+                                                    {review.text.length > 100 && (
+                                                        <button
+                                                            onClick={() => setExpandedReviews(prev => ({ ...prev, [i]: !prev[i] }))}
+                                                            className="text-[10px] text-primary font-bold hover:underline"
+                                                        >
+                                                            {expandedReviews[i] ? "Less" : "More"}
+                                                        </button>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        ))}
                                     </div>
                                 </div>
                             )}
@@ -383,3 +441,4 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
         </div>
     );
 }
+

@@ -159,7 +159,7 @@ export default function Dashboard() {
 
             <main className="flex-1 overflow-y-auto px-4 py-8 md:px-10 md:py-12">
                 <header className="flex flex-col md:flex-row md:items-center justify-between mb-8 md:mb-12 gap-6 md:gap-0">
-                    <div className="text-center md:text-left">
+                    <div className="text-left">
                         <h1 className="text-3xl md:text-4xl font-bold tracking-tight">Projects</h1>
                         <p className="text-muted-foreground mt-2 text-sm md:text-base">Manage your products and data sources.</p>
                     </div>

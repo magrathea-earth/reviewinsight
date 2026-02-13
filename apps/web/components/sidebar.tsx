@@ -199,6 +199,12 @@ function SidebarContent({ onClose }: { onClose?: () => void }) {
     );
 }
 
+import {
+    Sheet,
+    SheetContent,
+    SheetTrigger,
+} from "@/components/ui/sheet";
+
 export function Sidebar() {
     const [isMobileOpen, setIsMobileOpen] = useState(false);
 
@@ -209,27 +215,30 @@ export function Sidebar() {
                 <SidebarContent />
             </div>
 
-            {/* Mobile Header & Overlay */}
-            <div className="md:hidden flex flex-col">
+            {/* Mobile Navigation */}
+            <div className="md:hidden flex flex-col w-full">
                 <div className="fixed top-0 left-0 right-0 h-16 bg-background/80 backdrop-blur-xl border-b z-50 flex items-center justify-between px-4">
                     <Link href="/dashboard" className="flex items-center gap-2 font-bold text-lg">
-                        <img src="/logo.png" alt="ReviewInsight" className="w-6 h-6 object-contain" />
-                        <span>ReviewInsight</span>
+                        <img src="/logo.png" alt="ReviewInsight" className="w-8 h-8 object-contain" />
+                        <span className="tracking-tight">ReviewInsight</span>
                     </Link>
-                    <Button variant="ghost" size="icon" onClick={() => setIsMobileOpen(!isMobileOpen)}>
-                        {isMobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-                    </Button>
+
+                    <Sheet open={isMobileOpen} onOpenChange={setIsMobileOpen}>
+                        <SheetTrigger asChild>
+                            <Button variant="ghost" size="icon" className="shrink-0">
+                                <Menu className="w-6 h-6" />
+                            </Button>
+                        </SheetTrigger>
+                        <SheetContent side="left" className="p-0 w-72">
+                            <SidebarContent onClose={() => setIsMobileOpen(false)} />
+                        </SheetContent>
+                    </Sheet>
                 </div>
 
                 {/* Spacer for fixed header */}
                 <div className="h-16 w-full flex-shrink-0" />
-
-                {isMobileOpen && (
-                    <div className="fixed inset-0 top-16 z-40 bg-background/95 backdrop-blur-sm animate-in fade-in slide-in-from-left-5 duration-200">
-                        <SidebarContent onClose={() => setIsMobileOpen(false)} />
-                    </div>
-                )}
             </div>
         </>
     );
 }
+
