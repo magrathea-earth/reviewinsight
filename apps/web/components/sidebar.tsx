@@ -60,12 +60,7 @@ function SidebarContent({ onClose }: { onClose?: () => void }) {
         }
     }, [projectId]);
 
-    // Close mobile menu when path changes
-    useEffect(() => {
-        if (onClose) {
-            onClose();
-        }
-    }, [pathname]);
+    // Navigation links are handled by onClick={onClose} to ensure sheet closes on mobile
 
     const projectItems = [
         { name: "Overview", href: `/projects/${projectId}`, icon: LayoutDashboard, exact: true },
@@ -79,7 +74,7 @@ function SidebarContent({ onClose }: { onClose?: () => void }) {
     return (
         <div className="flex flex-col h-full">
             <div className="p-6">
-                <Link href="/dashboard" className="flex items-center gap-2 font-bold text-xl tracking-tight hover:opacity-80 transition-opacity">
+                <Link href="/dashboard" onClick={onClose} className="flex items-center gap-2 font-bold text-xl tracking-tight hover:opacity-80 transition-opacity">
                     <img src="/logo.png" alt="ReviewInsight" className="w-8 h-8 object-contain" />
                     <span>ReviewInsight</span>
                 </Link>
@@ -91,6 +86,7 @@ function SidebarContent({ onClose }: { onClose?: () => void }) {
                         <div className="space-y-1">
                             <Link
                                 href="/dashboard"
+                                onClick={onClose}
                                 className="flex items-center gap-2 px-3 py-2 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors mb-4"
                             >
                                 <ChevronLeft className="w-3 h-3" />
@@ -187,7 +183,7 @@ function SidebarContent({ onClose }: { onClose?: () => void }) {
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem asChild>
-                            <Link href="/api/auth/signout">
+                            <Link href="/api/auth/signout" onClick={onClose}>
                                 <LogOut className="mr-2 h-4 w-4" />
                                 <span>Log out</span>
                             </Link>

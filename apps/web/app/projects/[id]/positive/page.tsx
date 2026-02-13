@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Sidebar } from "@/components/sidebar";
+import { ProjectTabs } from "@/components/project-tabs";
 import { InsightBullet } from "@/components/insight-bullet";
 import { Loader2, Sparkles, TrendingUp, PartyPopper, Zap } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -42,6 +43,7 @@ export default function PositiveStoriesPage({ params }: { params: { id: string }
     return (
         <div className="flex flex-col md:flex-row min-h-screen bg-background">
             <Sidebar />
+            <ProjectTabs projectId={params.id} />
 
             <main className="flex-1 overflow-y-auto px-4 py-8 md:px-10 md:py-12">
                 <header className="mb-8 md:mb-10">

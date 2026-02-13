@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Sidebar } from "@/components/sidebar";
+import { ProjectTabs } from "@/components/project-tabs";
 import { InsightBullet } from "@/components/insight-bullet";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
@@ -112,6 +113,7 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
     return (
         <div className="flex flex-col md:flex-row min-h-screen bg-background">
             <Sidebar />
+            <ProjectTabs projectId={params.id} />
 
             <main className="flex-1 overflow-y-auto px-4 py-8 md:px-10 md:py-12">
                 <header className="flex flex-col md:flex-row md:items-center justify-between mb-8 md:mb-12 gap-6 md:gap-0">
