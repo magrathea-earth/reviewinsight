@@ -33,7 +33,6 @@ export function NewProjectModal({ isOpen, onClose, onCreate }: NewProjectModalPr
             ),
             color: "bg-green-500"
         },
-        /*
         {
             id: "instagram",
             name: "Instagram",
@@ -56,7 +55,6 @@ export function NewProjectModal({ isOpen, onClose, onCreate }: NewProjectModalPr
             ),
             color: "bg-slate-900"
         },
-        */
         {
             id: "apple",
             name: "App Store",
