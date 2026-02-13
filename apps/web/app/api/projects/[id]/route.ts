@@ -95,7 +95,7 @@ export async function GET(
             platform: item.platform,
             rating: item.rating,
             url: item.url,
-            date: new Date(item.createdAt).toLocaleDateString(),
+            date: new Date(item.createdAt).toLocaleDateString('en-GB'),
             dateISO: item.createdAt.toISOString()
         }))
     });
