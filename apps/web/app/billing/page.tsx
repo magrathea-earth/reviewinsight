@@ -59,7 +59,7 @@ export default function BillingPage() {
                 "7 projects",
                 "Full analysis history",
                 "Sync any time",
-                "Suggestions to make improvement fast"
+                "Suggestion to take quick action"
             ],
             popular: true,
             id: "PRO",
