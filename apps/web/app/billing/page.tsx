@@ -61,7 +61,7 @@ export default function BillingPage() {
                 "Sync any time",
                 "Suggestion to take quick action"
             ],
-            popular: true,
+            popular: false,
             id: "PRO",
         },
     ];
