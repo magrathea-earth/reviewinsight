@@ -11,13 +11,37 @@ export async function GET() {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
 
-        const userOrg = await prisma.userOrganization.findFirst({
-            where: { user: { email: session.user.email } },
+        const userId = (session.user as any).id;
+
+        let userOrg = await prisma.userOrganization.findFirst({
+            where: {
+                OR: [
+                    { userId: userId },
+                    { user: { email: session.user.email } }
+                ]
+            },
             include: { organization: true },
         });
 
         if (!userOrg) {
-            return NextResponse.json({ error: "No organization found" }, { status: 404 });
+            console.log("No organization found for user in plan fetch, creating one...");
+            const newOrg = await prisma.organization.create({
+                data: {
+                    name: `${session.user?.name || 'My'}'s Org`,
+                    users: {
+                        create: {
+                            userId: userId || (await prisma.user.findUnique({ where: { email: session.user.email } }))?.id || '',
+                            role: "OWNER"
+                        }
+                    }
+                },
+                include: { users: true }
+            });
+            
+            return NextResponse.json({
+                plan: newOrg.plan,
+                orgName: newOrg.name,
+            });
         }
 
         return NextResponse.json({
