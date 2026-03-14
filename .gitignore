@@ -13,3 +13,4 @@ coverage
 
 # Local Marketing API (OpenClaw)
 apps/web/app/api/v1/marketing
+.vercel
