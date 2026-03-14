@@ -10,3 +10,6 @@ test-output.json
 test-output-*.json
 coverage
 .turbo
+
+# Local Marketing API (OpenClaw)
+apps/web/app/api/v1/marketing

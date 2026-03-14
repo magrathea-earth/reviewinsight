@@ -7,26 +7,17 @@ import { cn } from "@/lib/utils";
 export default function BillingPage() {
     const plans = [
         {
-            name: "Starter",
-            price: "$29",
-            description: "Perfect for small apps and side projects.",
-            features: ["3 Projects", "10k reviews/month", "7-day analysis history", "Email support"],
-            current: false,
-        },
-        {
             name: "Pro",
-            price: "$99",
-            description: "The standard for growing B2B products.",
-            features: ["20 Projects", "100k reviews/month", "Full analysis history", "Priority support", "Custom AI prompts"],
+            price: "$4.99",
+            description: "Everything you need. One simple plan.",
+            features: [
+                "7 projects",
+                "Full analysis history",
+                "Sync any time",
+                "Suggestions to make improvement fast"
+            ],
             current: true,
             popular: true,
-        },
-        {
-            name: "Enterprise",
-            price: "Custom",
-            description: "Scale insights across your entire organization.",
-            features: ["Unlimited Projects", "Unlimited reviews", "Dedicated instance", "SLA & SSO", "Custom connectors"],
-            current: false,
         },
     ];
 
@@ -40,12 +31,12 @@ export default function BillingPage() {
                     <p className="text-muted-foreground mt-2">Manage your subscription and usage limits.</p>
                 </header>
 
-                <section className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
+                <section className="flex justify-center mb-16">
                     {plans.map((plan) => (
                         <div
                             key={plan.name}
                             className={cn(
-                                "relative flex flex-col p-8 rounded-3xl border transition-all",
+                                "relative flex flex-col w-full max-w-lg p-8 rounded-3xl border transition-all",
                                 plan.current ? "border-primary shadow-lg ring-1 ring-primary/20" : "bg-card hover:border-sidebar-accent"
                             )}
                         >

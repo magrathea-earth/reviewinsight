@@ -226,8 +226,10 @@ export class ProjectSyncer {
             orderBy: { createdAt: "desc" },
         });
 
+        console.log(`[ProjectSyncer] Found ${poorItems.length} poor items and ${goodItems.length} good items for project ${projectId}`);
+
         if (poorItems.length === 0 && goodItems.length === 0) {
-            console.log("[ProjectSyncer] No items to analyze");
+            console.log("[ProjectSyncer] No items to analyze. Skipping analysis.");
             return;
         }
 
@@ -252,9 +254,12 @@ export class ProjectSyncer {
         }`;
 
         try {
+            console.log(`[ProjectSyncer] Sending analysis request to Gemini model...`);
             const resultResponse = await this.model.generateContent(prompt);
             const responseText = resultResponse.response.text();
 
+            console.log(`[ProjectSyncer] Received analysis response. Processing JSON...`);
+            // Helper to clean potential JSON markdown
             const cleaned = responseText.replace(/```json/g, "").replace(/```/g, "").trim();
             const result = JSON.parse(cleaned);
 
@@ -275,9 +280,13 @@ export class ProjectSyncer {
                 },
             });
 
-            console.log("[ProjectSyncer] Analysis completed and saved");
-        } catch (e) {
+            console.log("[ProjectSyncer] Analysis completed and saved successfully.");
+        } catch (e: any) {
             console.error("[ProjectSyncer] Analysis failed:", e);
+            // Log full error details for debugging
+            if (e.response && e.response.promptFeedback) {
+                console.error("[ProjectSyncer] Prompt Feedback:", JSON.stringify(e.response.promptFeedback, null, 2));
+            }
         }
     }
 }

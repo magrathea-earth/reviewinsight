@@ -1,32 +1,68 @@
+"use client"
+
+import { useState, useEffect } from "react";
 import { Sidebar } from "@/components/sidebar";
 import { Button } from "@/components/ui/button";
-import { Check, CreditCard, Zap } from "lucide-react";
+import { Check, CreditCard, Zap, Loader2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { toast } from "@/components/ui/use-toast";
 
 export default function BillingPage() {
+    const [currentPlan, setCurrentPlan] = useState<string>("STARTER");
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        fetch("/api/user/plan")
+            .then(res => res.json())
+            .then(data => {
+                if (data.plan) setCurrentPlan(data.plan);
+            })
+            .catch(() => setCurrentPlan("STARTER"));
+    }, []);
+
+    const handleUpgrade = async () => {
+        setLoading(true);
+        try {
+            const res = await fetch("/api/billing/checkout", { method: "POST" });
+            const data = await res.json();
+            if (data.url) {
+                window.location.href = data.url;
+            } else {
+                toast({
+                    title: "Error",
+                    description: data.error || "Failed to start checkout session",
+                    variant: "destructive",
+                });
+            }
+        } catch (error) {
+            toast({
+                title: "Error",
+                description: "Something went wrong. Please try again.",
+                variant: "destructive",
+            });
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handlePortal = () => {
+        window.open("https://reviewinsight.lemonsqueezy.com/billing", "_blank");
+    }
+
     const plans = [
         {
-            name: "Starter",
-            price: "$29",
-            description: "Perfect for small apps and side projects.",
-            features: ["3 Projects", "10k reviews/month", "7-day analysis history", "Email support"],
-            current: false,
-        },
-        {
             name: "Pro",
-            price: "$99",
-            description: "The standard for growing B2B products.",
-            features: ["20 Projects", "100k reviews/month", "Full analysis history", "Priority support", "Custom AI prompts"],
-            current: true,
+            price: "$4.99",
+            description: "Everything you need. One simple plan.",
+            features: [
+                "7 projects",
+                "Full analysis history",
+                "Sync any time",
+                "Suggestions to make improvement fast"
+            ],
             popular: true,
-        },
-        {
-            name: "Enterprise",
-            price: "Custom",
-            description: "Scale insights across your entire organization.",
-            features: ["Unlimited Projects", "Unlimited reviews", "Dedicated instance", "SLA & SSO", "Custom connectors"],
-            current: false,
+            id: "PRO",
         },
     ];
 
@@ -37,85 +73,82 @@ export default function BillingPage() {
             <main className="flex-1 overflow-y-auto px-4 py-8 md:px-10 md:py-12">
                 <header className="mb-8 md:mb-12">
                     <h1 className="text-3xl md:text-4xl font-bold tracking-tight">Billing & Plans</h1>
-                    <p className="text-muted-foreground mt-2 text-sm md:text-base">Manage your subscription and usage limits.</p>
+                    <p className="text-muted-foreground mt-2 text-sm md:text-base">Manage your subscription and developer API access.</p>
                 </header>
 
-                <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-12 md:mb-16">
-                    {plans.map((plan) => (
-                        <div
-                            key={plan.name}
-                            className={cn(
-                                "relative flex flex-col p-6 md:p-8 rounded-3xl border transition-all",
-                                plan.current ? "border-primary shadow-lg ring-1 ring-primary/20" : "bg-card hover:border-sidebar-accent"
-                            )}
-                        >
-                            {plan.popular && (
-                                <div className="absolute top-0 right-6 md:right-8 -translate-y-1/2">
-                                    <Badge className="bg-primary text-primary-foreground px-3 py-1 font-bold text-xs md:text-sm">MOST POPULAR</Badge>
-                                </div>
-                            )}
-
-                            <div className="mb-6 md:mb-8">
-                                <h3 className="text-xl font-bold">{plan.name}</h3>
-                                <p className="text-sm text-muted-foreground mt-2 min-h-[40px]">{plan.description}</p>
-                            </div>
-
-                            <div className="mb-6 md:mb-8">
-                                <span className="text-3xl md:text-4xl font-bold">{plan.price}</span>
-                                {plan.price !== "Custom" && <span className="text-muted-foreground font-medium">/month</span>}
-                            </div>
-
-                            <ul className="space-y-3 md:space-y-4 mb-8 md:mb-10 flex-1 text-sm">
-                                {plan.features.map((feature) => (
-                                    <li key={feature} className="flex items-center gap-3">
-                                        <div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-                                            <Check className="w-3 h-3 text-primary" />
-                                        </div>
-                                        <span>{feature}</span>
-                                    </li>
-                                ))}
-                            </ul>
-
-                            <Button
-                                variant={plan.current ? "outline" : "premium"}
-                                className="w-full h-10 md:h-12 text-sm md:text-md font-bold"
-                                disabled={plan.current}
+                <section className="flex justify-center mb-12 md:mb-16">
+                    {plans.map((plan) => {
+                        const isCurrent = currentPlan === plan.id;
+                        return (
+                            <div
+                                key={plan.name}
+                                className={cn(
+                                    "relative flex flex-col w-full max-w-lg p-6 md:p-8 rounded-3xl border transition-all",
+                                    isCurrent ? "border-primary shadow-lg ring-1 ring-primary/20 bg-primary/5" : "bg-card hover:border-sidebar-accent"
+                                )}
                             >
-                                {plan.current ? "Current Plan" : "Upgrade Now"}
-                            </Button>
-                        </div>
-                    ))}
+                                {plan.popular && (
+                                    <div className="absolute top-0 right-6 md:right-8 -translate-y-1/2">
+                                        <Badge className="bg-primary text-primary-foreground px-3 py-1 font-bold text-xs md:text-sm">MOST POPULAR</Badge>
+                                    </div>
+                                )}
+
+                                <div className="mb-6 md:mb-8">
+                                    <h3 className="text-xl font-bold">{plan.name}</h3>
+                                    <p className="text-sm text-muted-foreground mt-2 min-h-[40px]">{plan.description}</p>
+                                </div>
+
+                                <div className="mb-6 md:mb-8">
+                                    <span className="text-3xl md:text-4xl font-bold">{plan.price}</span>
+                                    {plan.price !== "Custom" && <span className="text-muted-foreground font-medium">/month</span>}
+                                </div>
+
+                                <ul className="space-y-3 md:space-y-4 mb-8 md:mb-10 flex-1 text-sm">
+                                    {plan.features.map((feature) => (
+                                        <li key={feature} className="flex items-center gap-3">
+                                            <div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                                                <Check className="w-3 h-3 text-primary" />
+                                            </div>
+                                            <span>{feature}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+
+                                <Button
+                                    variant={isCurrent ? "outline" : "premium"}
+                                    className="w-full h-10 md:h-12 text-sm md:text-md font-bold"
+                                    disabled={loading}
+                                    onClick={isCurrent ? handlePortal : (plan.id === "PRO" ? handleUpgrade : undefined)}
+                                >
+                                    {loading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+                                    {isCurrent ? "Manage Subscription" : plan.id === "ENTERPRISE" ? "Contact Us" : "Upgrade Now"}
+                                </Button>
+                            </div>
+                        );
+                    })}
                 </section>
 
                 <section className="max-w-4xl">
-                    <h2 className="text-xl font-bold mb-4 md:mb-6">Usage Summary</h2>
+                    <h2 className="text-xl font-bold mb-4 md:mb-6">Developer API (Local Host)</h2>
                     <div className="bg-accent/20 rounded-2xl p-6 md:p-8 border border-dashed">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
-                            <div>
-                                <div className="flex justify-between items-end mb-3">
-                                    <span className="text-sm font-medium">Monthly Review Limit</span>
-                                    <span className="text-sm text-muted-foreground">12,482 / 100,000</span>
+                        <div className="space-y-4">
+                            <p className="text-sm text-muted-foreground">
+                                Use our Marketing API to automate insights for your "OpenClaw" bot.
+                                Only available for local host development currently.
+                            </p>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="p-4 rounded-xl bg-card border">
+                                    <h4 className="font-bold text-sm mb-2">Analyze App</h4>
+                                    <code className="text-[10px] bg-black/20 p-2 rounded block">
+                                        POST /api/v1/marketing/analyze
+                                    </code>
                                 </div>
-                                <div className="w-full h-2 bg-accent rounded-full overflow-hidden">
-                                    <div className="bg-primary h-full w-[12.5%]" />
+                                <div className="p-4 rounded-xl bg-card border">
+                                    <h4 className="font-bold text-sm mb-2">Get Results</h4>
+                                    <code className="text-[10px] bg-black/20 p-2 rounded block">
+                                        GET /api/v1/marketing/results/[id]
+                                    </code>
                                 </div>
-                                <p className="text-xs text-muted-foreground mt-3 flex items-center gap-1.5">
-                                    <Zap className="w-3 h-3" /> Resets in 14 days
-                                </p>
-                            </div>
-
-                            <div className="flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-6">
-                                <div className="w-12 h-12 rounded-2xl bg-card border flex items-center justify-center shadow-sm shrink-0">
-                                    <CreditCard className="w-6 h-6 text-muted-foreground" />
-                                </div>
-                                <div className="flex-1">
-                                    <p className="font-bold flex items-center gap-2">
-                                        Visa ending in 4242
-                                        <Badge variant="outline" className="text-[10px] font-bold">Default</Badge>
-                                    </p>
-                                    <p className="text-sm text-muted-foreground">Expires 12/28</p>
-                                </div>
-                                <Button variant="ghost" size="sm" className="w-full md:w-auto ml-auto">Update</Button>
                             </div>
                         </div>
                     </div>

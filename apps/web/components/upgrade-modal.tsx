@@ -40,26 +40,26 @@ export function UpgradeModal({ isOpen, onClose, title, description }: UpgradeMod
                         </div>
                         <div>
                             <div className="font-semibold text-sm">Pro Plan</div>
-                            <div className="text-xs text-muted-foreground">$29/month</div>
+                            <div className="text-xs text-muted-foreground">$4.99/month</div>
                         </div>
                     </div>
 
                     <div className="space-y-2 text-sm">
                         <div className="flex items-center gap-2">
                             <Check className="h-4 w-4 text-green-500" />
-                            <span>Unlimited Projects</span>
+                            <span>7 projects</span>
                         </div>
                         <div className="flex items-center gap-2">
                             <Check className="h-4 w-4 text-green-500" />
-                            <span>Unlimited Syncs (No Rate Limits)</span>
+                            <span>Full analysis history</span>
                         </div>
                         <div className="flex items-center gap-2">
                             <Check className="h-4 w-4 text-green-500" />
-                            <span>Advanced AI Analysis</span>
+                            <span>Sync any time</span>
                         </div>
                         <div className="flex items-center gap-2">
                             <Check className="h-4 w-4 text-green-500" />
-                            <span>Priority Support</span>
+                            <span>Suggestions to make improvement fast</span>
                         </div>
                     </div>
                 </div>

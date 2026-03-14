@@ -46,8 +46,18 @@ function SidebarContent({ onClose }: { onClose?: () => void }) {
     const { setTheme, theme } = useTheme();
     const pathname = usePathname();
     const [projectName, setProjectName] = useState("Loading...");
+    const [plan, setPlan] = useState<string>("STARTER");
     const isProjectPage = pathname.startsWith("/projects/");
     const projectId = isProjectPage ? pathname.split("/")[2] : null;
+
+    useEffect(() => {
+        fetch("/api/user/plan")
+            .then(res => res.json())
+            .then(data => {
+                if (data.plan) setPlan(data.plan);
+            })
+            .catch(() => setPlan("STARTER"));
+    }, []);
 
     useEffect(() => {
         if (projectId) {
@@ -156,10 +166,17 @@ function SidebarContent({ onClose }: { onClose?: () => void }) {
                             </div>
                             <div className="flex flex-col flex-1 overflow-hidden">
                                 <span className="text-sm font-bold truncate">{userName}</span>
-                                <span className="text-[10px] uppercase font-bold tracking-tighter text-muted-foreground/60">Free Plan</span>
+                                <span className={cn(
+                                    "text-[10px] uppercase font-black tracking-widest px-1.5 py-0.5 rounded-sm w-fit mt-0.5",
+                                    plan === "PRO"
+                                        ? "bg-primary text-primary-foreground"
+                                        : "bg-muted-foreground/20 text-muted-foreground/80"
+                                )}>
+                                    {plan === "PRO" ? "Pro Plan" : "Free Plan"}
+                                </span>
                             </div>
                             <div className="text-muted-foreground">
-                                <Settings className="w-4 h-4" />
+                                {plan === "PRO" ? <Sparkles className="w-4 h-4 text-primary" /> : <Settings className="w-4 h-4" />}
                             </div>
                         </button>
                     </DropdownMenuTrigger>
