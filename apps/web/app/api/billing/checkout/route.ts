@@ -2,15 +2,12 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { lemonSqueezy } from "@/lib/lemonsqueezy";
+import { polar } from "@/lib/polar";
 
 export const dynamic = "force-dynamic";
 
 export async function POST(req: Request) {
     try {
-        if (!lemonSqueezy) {
-            return NextResponse.json({ error: "Lemon Squeezy client not initialized" }, { status: 500 });
-        }
         const session = await getServerSession(authOptions);
 
         if (!session?.user?.email) {
@@ -28,34 +25,25 @@ export async function POST(req: Request) {
         }
 
         const org = userOrg.organization;
-        const variantId = process.env.LEMONSQUEEZY_VARIANT_ID;
-        const storeId = process.env.LEMONSQUEEZY_STORE_ID;
+        const productId = process.env.POLAR_PRODUCT_ID;
 
-        if (!variantId || !storeId) {
-            return NextResponse.json({ error: "Lemon Squeezy config missing" }, { status: 500 });
+        if (!productId) {
+            return NextResponse.json({ error: "Polar configuration missing" }, { status: 500 });
         }
 
         // 2. Create Checkout
-        const newCheckout = await lemonSqueezy.createCheckout({
-            store: storeId,
-            variant: variantId,
-            checkout_data: {
-                email: session.user.email,
-                name: org.name,
-                custom: {
-                    organization_id: org.id, // Custom data passed to webhook
-                },
+        const result = await polar.checkouts.custom.create({
+            productPriceId: productId,
+            successUrl: `${process.env.NEXTAUTH_URL}/dashboard?checkout_id={CHECKOUT_ID}`,
+            customerEmail: session.user.email,
+            metadata: {
+                organization_id: org.id,
             },
-            product_options: {
-                redirect_url: `${process.env.NEXTAUTH_URL}/dashboard`,
-                receipt_button_text: "Go to Dashboard",
-                receipt_thank_you_note: "Thank you for upgrading to Pro!",
-            }
         });
 
-        return NextResponse.json({ url: newCheckout.data.attributes.url });
+        return NextResponse.json({ url: result.url });
     } catch (error: any) {
-        console.error("[Lemon Squeezy Checkout Error]", error);
+        console.error("[Polar Checkout Error]", error);
         return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }

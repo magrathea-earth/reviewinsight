@@ -1,71 +1,77 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import crypto from "crypto";
+import { validateEvent } from "@polar-sh/nextjs/webhooks";
 
 export async function POST(req: Request) {
     try {
         const body = await req.text();
-        const secret = process.env.LEMONSQUEEZY_WEBHOOK_SECRET;
+        const signature = req.headers.get("x-polar-signature") || "";
+        const secret = process.env.POLAR_WEBHOOK_SECRET;
 
         if (!secret) {
             return NextResponse.json({ error: "Missing webhook secret" }, { status: 500 });
         }
 
-        // 1. Verify Signature
-        const signature = req.headers.get("x-signature");
-        const hmac = crypto.createHmac("sha256", secret);
-        const digest = hmac.update(body).digest("hex");
-
-        if (!signature || signature !== digest) {
+        // 1. Verify Signature and Parse Event
+        let event;
+        try {
+            event = validateEvent(body, signature, secret);
+        } catch (err: any) {
+            console.error("[Polar Webhook] Signature verification failed", err);
             return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
         }
 
-        const event = JSON.parse(body);
-        const { meta, data } = event;
-        const eventName = meta.event_name;
-
         // 2. Handle Events
-        // The custom data we passed during checkout is in `meta.custom_data`
-        const customData = meta.custom_data || {};
-        const organizationId = customData.organization_id;
+        // console.log(`[Polar Webhook] Event Type: ${event.type}`);
 
-        if (!organizationId) {
-            console.warn(`[LemonWebhook] No organization_id in custom_data for event ${eventName}`);
-            return NextResponse.json({ received: true });
-        }
+        switch (event.type) {
+            case "subscription.created":
+            case "subscription.updated": {
+                const sub = event.data;
+                const organizationId = sub.metadata?.organization_id;
 
-        if (eventName === "subscription_created" || eventName === "subscription_updated") {
-            const subscriptionId = data.id;
-            const customerId = data.attributes.customer_id;
-            const status = data.attributes.status; // 'active', 'past_due', 'paused', 'cancelled', 'expired'
-
-            // Map Lemon Squeezy status to our internal status
-            const isPro = status === "active";
-
-            await prisma.organization.update({
-                where: { id: organizationId.toString() },
-                data: {
-                    subscriptionId: subscriptionId.toString(),
-                    subscriptionStatus: status,
-                    plan: isPro ? "PRO" : "STARTER",
-                    stripeCustomerId: customerId.toString(),
-                },
-            });
-            console.log(`[LemonWebhook] Org ${organizationId} updated. Status: ${status}`);
-        } else if (eventName === 'subscription_cancelled' || eventName === 'subscription_expired') {
-            await prisma.organization.update({
-                where: { id: organizationId.toString() },
-                data: {
-                    subscriptionStatus: 'canceled',
-                    plan: 'STARTER'
+                if (!organizationId) {
+                    console.warn(`[Polar Webhook] No organization_id in metadata for event ${event.type}`);
+                    return NextResponse.json({ received: true });
                 }
-            });
-            console.log(`[LemonWebhook] Org ${organizationId} subscription cancelled/expired`);
+
+                const isPro = sub.status === "active";
+
+                await prisma.organization.update({
+                    where: { id: organizationId.toString() },
+                    data: {
+                        subscriptionId: sub.id,
+                        subscriptionStatus: sub.status,
+                        plan: isPro ? "PRO" : "STARTER",
+                        stripeCustomerId: sub.customerId, // Polar uses stripe internally sometimes, but sub.customerId is standard
+                    },
+                });
+                console.log(`[Polar Webhook] Org ${organizationId} updated. Status: ${sub.status}`);
+                break;
+            }
+
+            case "subscription.revoked":
+            case "subscription.canceled": {
+                const sub = event.data;
+                const organizationId = sub.metadata?.organization_id;
+
+                if (organizationId) {
+                    await prisma.organization.update({
+                        where: { id: organizationId.toString() },
+                        data: {
+                            subscriptionStatus: 'canceled',
+                            plan: 'STARTER'
+                        }
+                    });
+                    console.log(`[Polar Webhook] Org ${organizationId} subscription cancelled/revoked`);
+                }
+                break;
+            }
         }
 
         return NextResponse.json({ received: true });
     } catch (error: any) {
-        console.error("[Lemon Squeezy Webhook Error]", error);
+        console.error("[Polar Webhook Error]", error);
         return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }
