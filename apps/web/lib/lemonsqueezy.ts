@@ -1,4 +1,4 @@
-import { LemonSqueezy } from "lemonsqueezy.ts";
+import { LemonsqueezyClient } from "lemonsqueezy.ts";
 
 const apiKey = process.env.LEMONSQUEEZY_API_KEY!;
 
@@ -6,4 +6,4 @@ if (!apiKey) {
     throw new Error("LEMONSQUEEZY_API_KEY is missing from environment variables");
 }
 
-export const lemonSqueezy = new LemonSqueezy(apiKey);
+export const lemonSqueezy = new LemonsqueezyClient(apiKey);

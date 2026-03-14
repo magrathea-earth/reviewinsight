@@ -31,20 +31,20 @@ export async function POST(req: Request) {
         }
 
         // 2. Create Checkout
-        const newCheckout = await lemonSqueezy.checkouts.create({
-            storeId: parseInt(storeId),
-            variantId: parseInt(variantId),
-            checkoutData: {
+        const newCheckout = await lemonSqueezy.createCheckout({
+            store: storeId,
+            variant: variantId,
+            checkout_data: {
                 email: session.user.email,
                 name: org.name,
                 custom: {
                     organization_id: org.id, // Custom data passed to webhook
                 },
             },
-            productOptions: {
-                redirectUrl: `${process.env.NEXTAUTH_URL}/dashboard`,
-                receiptButtonText: "Go to Dashboard",
-                receiptThankYouNote: "Thank you for upgrading to Pro!",
+            product_options: {
+                redirect_url: `${process.env.NEXTAUTH_URL}/dashboard`,
+                receipt_button_text: "Go to Dashboard",
+                receipt_thank_you_note: "Thank you for upgrading to Pro!",
             }
         });
 

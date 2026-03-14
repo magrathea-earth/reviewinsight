@@ -1,1 +1,25 @@
-{}
+{
+  "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
+  "/_not-found": "app/_not-found.js",
+  "/api/billing/webhook/route": "app/api/billing/webhook/route.js",
+  "/api/projects/[id]/route": "app/api/projects/[id]/route.js",
+  "/api/billing/checkout/route": "app/api/billing/checkout/route.js",
+  "/api/projects/route": "app/api/projects/route.js",
+  "/api/user/plan/route": "app/api/user/plan/route.js",
+  "/api/v1/marketing/analyze/route": "app/api/v1/marketing/analyze/route.js",
+  "/api/v1/marketing/results/[id]/route": "app/api/v1/marketing/results/[id]/route.js",
+  "/auth/signin/page": "app/auth/signin/page.js",
+  "/billing/page": "app/billing/page.js",
+  "/dashboard/page": "app/dashboard/page.js",
+  "/debug-sync/page": "app/debug-sync/page.js",
+  "/icon.png/route": "app/icon.png/route.js",
+  "/insights/page": "app/insights/page.js",
+  "/projects/[id]/insights/page": "app/projects/[id]/insights/page.js",
+  "/page": "app/page.js",
+  "/projects/[id]/positive/page": "app/projects/[id]/positive/page.js",
+  "/projects/[id]/page": "app/projects/[id]/page.js",
+  "/projects/[id]/reviews/page": "app/projects/[id]/reviews/page.js",
+  "/reviews/page": "app/reviews/page.js",
+  "/settings/page": "app/settings/page.js",
+  "/api/sync/route": "app/api/sync/route.js"
+}

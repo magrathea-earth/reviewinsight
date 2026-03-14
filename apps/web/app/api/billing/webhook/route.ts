@@ -48,7 +48,7 @@ export async function POST(req: Request) {
                     subscriptionId: subscriptionId.toString(),
                     subscriptionStatus: status,
                     plan: isPro ? "PRO" : "STARTER",
-                    lemonSqueezyCustomerId: customerId.toString(),
+                    stripeCustomerId: customerId.toString(),
                 },
             });
             console.log(`[LemonWebhook] Org ${organizationId} updated. Status: ${status}`);
