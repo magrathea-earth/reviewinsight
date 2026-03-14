@@ -1,11 +1,13 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { validateEvent } from "@polar-sh/nextjs/webhooks";
+import { validateEvent } from "@polar-sh/sdk/webhooks";
 
 export async function POST(req: Request) {
     try {
         const body = await req.text();
-        const signature = req.headers.get("x-polar-signature") || "";
+        const headers = {
+            "x-polar-signature": req.headers.get("x-polar-signature") || "",
+        };
         const secret = process.env.POLAR_WEBHOOK_SECRET;
 
         if (!secret) {
@@ -15,7 +17,7 @@ export async function POST(req: Request) {
         // 1. Verify Signature and Parse Event
         let event;
         try {
-            event = validateEvent(body, signature, secret);
+            event = validateEvent(body, headers, secret);
         } catch (err: any) {
             console.error("[Polar Webhook] Signature verification failed", err);
             return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
