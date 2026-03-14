@@ -128,31 +128,7 @@ export default function BillingPage() {
                     })}
                 </section>
 
-                <section className="max-w-4xl">
-                    <h2 className="text-xl font-bold mb-4 md:mb-6">Developer API (Local Host)</h2>
-                    <div className="bg-accent/20 rounded-2xl p-6 md:p-8 border border-dashed">
-                        <div className="space-y-4">
-                            <p className="text-sm text-muted-foreground">
-                                Use our Marketing API to automate insights for your "OpenClaw" bot.
-                                Only available for local host development currently.
-                            </p>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div className="p-4 rounded-xl bg-card border">
-                                    <h4 className="font-bold text-sm mb-2">Analyze App</h4>
-                                    <code className="text-[10px] bg-black/20 p-2 rounded block">
-                                        POST /api/v1/marketing/analyze
-                                    </code>
-                                </div>
-                                <div className="p-4 rounded-xl bg-card border">
-                                    <h4 className="font-bold text-sm mb-2">Get Results</h4>
-                                    <code className="text-[10px] bg-black/20 p-2 rounded block">
-                                        GET /api/v1/marketing/results/[id]
-                                    </code>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
+
             </main>
         </div>
     );
