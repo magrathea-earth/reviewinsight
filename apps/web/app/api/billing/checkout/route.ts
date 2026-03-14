@@ -53,10 +53,13 @@ export async function POST(req: Request) {
         }
 
         // 2. Create Checkout
+        const customerEmail = session.user.email;
+        const isValidEmail = customerEmail && customerEmail.includes('@') && customerEmail.includes('.');
+
         const result = await polar.checkouts.create({
             products: [productId],
             successUrl: `${process.env.NEXTAUTH_URL}/dashboard?checkout_id={CHECKOUT_ID}`,
-            customerEmail: session.user.email,
+            customerEmail: isValidEmail ? customerEmail : undefined,
             metadata: {
                 organization_id: org.id,
             },
