@@ -4,8 +4,13 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { lemonSqueezy } from "@/lib/lemonsqueezy";
 
+export const dynamic = "force-dynamic";
+
 export async function POST(req: Request) {
     try {
+        if (!lemonSqueezy) {
+            return NextResponse.json({ error: "Lemon Squeezy client not initialized" }, { status: 500 });
+        }
         const session = await getServerSession(authOptions);
 
         if (!session?.user?.email) {

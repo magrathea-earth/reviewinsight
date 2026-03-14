@@ -1,9 +1,11 @@
 import { LemonsqueezyClient } from "lemonsqueezy.ts";
 
-const apiKey = process.env.LEMONSQUEEZY_API_KEY!;
+const apiKey = process.env.LEMONSQUEEZY_API_KEY;
 
-if (!apiKey) {
-    throw new Error("LEMONSQUEEZY_API_KEY is missing from environment variables");
+export const lemonSqueezy = apiKey 
+    ? new LemonsqueezyClient(apiKey)
+    : null as unknown as LemonsqueezyClient;
+
+if (!apiKey && process.env.NODE_ENV === "production") {
+    console.warn("LEMONSQUEEZY_API_KEY is missing. Checkout functionality will not work.");
 }
-
-export const lemonSqueezy = new LemonsqueezyClient(apiKey);
