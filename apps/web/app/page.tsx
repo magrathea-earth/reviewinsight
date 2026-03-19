@@ -52,29 +52,31 @@ export default function LandingPage() {
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
-                            transition={{ duration: 1 }}
-                            className="absolute inset-0 pointer-events-none -z-10"
+                            transition={{ duration: 1.5 }}
+                            className="absolute inset-0 pointer-events-none z-0"
                         >
                             {/* Floating 3D Icons Behind Text */}
                             <motion.div
                                 animate={{ 
-                                    y: [0, -20, 0],
-                                    rotate: [0, 5, 0]
+                                    y: [0, -30, 0],
+                                    rotate: [0, 8, 0],
+                                    scale: [1, 1.05, 1]
                                 }}
-                                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                                className="absolute top-[10%] left-[5%] md:left-[15%] w-32 h-32 md:w-64 md:h-64 opacity-20 blur-[2px]"
+                                transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+                                className="absolute top-[-20%] left-[0%] md:left-[10%] w-48 h-48 md:w-96 md:h-96 opacity-40 blur-[1px]"
                             >
-                                <Image src="/app-store-3d.png" alt="" width={256} height={256} className="w-full h-full object-contain" />
+                                <Image src="/app-store-3d.png" alt="" width={512} height={512} className="w-full h-full object-contain" />
                             </motion.div>
                             <motion.div
                                 animate={{ 
-                                    y: [0, 20, 0],
-                                    rotate: [0, -5, 0]
+                                    y: [0, 30, 0],
+                                    rotate: [0, -8, 0],
+                                    scale: [1, 1.1, 1]
                                 }}
-                                transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                                className="absolute top-[20%] right-[5%] md:right-[15%] w-32 h-32 md:w-64 md:h-64 opacity-20 blur-[2px]"
+                                transition={{ duration: 9, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                                className="absolute top-[0%] right-[0%] md:right-[10%] w-48 h-48 md:w-96 md:h-96 opacity-40 blur-[1px]"
                             >
-                                <Image src="/google-play-3d.png" alt="" width={256} height={256} className="w-full h-full object-contain" />
+                                <Image src="/google-play-3d.png" alt="" width={512} height={512} className="w-full h-full object-contain" />
                             </motion.div>
                         </motion.div>
 
