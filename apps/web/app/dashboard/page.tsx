@@ -6,6 +6,8 @@ import { Plus, Settings2, ExternalLink, MoreVertical, Trash2 } from "lucide-reac
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { NewProjectModal } from "@/components/new-project-modal";
 import {
     DropdownMenu,
@@ -16,29 +18,48 @@ import {
 import { UpgradeModal } from "@/components/upgrade-modal";
 
 export default function Dashboard() {
+    const { data: session, status } = useSession();
+    const router = useRouter();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [upgradeModalOpen, setUpgradeModalOpen] = useState(false);
     const [projects, setProjects] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch("/api/projects")
-            .then(res => res.json())
-            .then(data => {
-                if (Array.isArray(data)) {
-                    setProjects(data);
-                } else {
-                    console.error("Expected array but got:", data);
+        if (status === "unauthenticated") {
+            router.push("/auth/signin");
+            return;
+        }
+
+        if (status === "authenticated") {
+            fetch("/api/projects")
+                .then(res => {
+                    if (res.status === 401) {
+                        router.push("/auth/signin");
+                        return [];
+                    }
+                    return res.json();
+                })
+                .then(data => {
+                    if (Array.isArray(data)) {
+                        setProjects(data);
+                    } else {
+                        console.error("Expected array but got:", data);
+                        setProjects([]);
+                    }
+                    setLoading(false);
+                })
+                .catch(err => {
+                    console.error("Failed to load projects", err);
                     setProjects([]);
-                }
-                setLoading(false);
-            })
-            .catch(err => {
-                console.error("Failed to load projects", err);
-                setProjects([]);
-                setLoading(false);
-            });
-    }, []);
+                    setLoading(false);
+                });
+        }
+    }, [status, router]);
+
+    if (status === "loading") {
+        return <div className="flex h-screen w-full items-center justify-center">Loading dashboard...</div>;
+    }
 
     const handleAddProject = async (name: string, platform: string, configInput?: string) => {
         try {
