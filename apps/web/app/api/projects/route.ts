@@ -77,28 +77,6 @@ export async function POST(req: NextRequest) {
         console.log("Found existing org:", orgId);
     }
 
-    // CHECK PLAN LIMITS
-    const org = await prisma.organization.findUnique({
-        where: { id: orgId }
-    });
-
-    const projectCount = await prisma.project.count({
-        where: { organizationId: orgId }
-    });
-
-    console.log(`[API] Checking limits for Org: ${orgId}, Plan: ${org?.plan}, Project Count: ${projectCount}`);
-
-    // If plan is STARTER or undefined/null (default to starter), enforce limit
-    const isFreePlan = !org?.plan || org.plan === "STARTER";
-
-    if (isFreePlan && projectCount >= 1) {
-        return NextResponse.json({
-            error: "Free Plan Limit Reached",
-            code: "LIMIT_REACHED",
-            message: "You can only create 1 project on the Free Plan. Please upgrade to Pro to add more."
-        }, { status: 403 });
-    }
-
     console.log("Creating project with orgId:", orgId);
     const project = await prisma.project.create({
         data: {
