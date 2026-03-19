@@ -114,21 +114,17 @@ export default function Dashboard() {
             const newProject = await res.json();
             console.log("[Dashboard] Project created successfully:", newProject.id);
 
-            // Refetch to get formatted stats
-            const refreshRes = await fetch("/api/projects");
-            const refreshedData = await refreshRes.json();
-            if (Array.isArray(refreshedData)) {
-                setProjects(refreshedData);
-            }
-
-            setIsModalOpen(false);
-
-            // Trigger initial sync (non-blocking)
+            // Trigger initial sync (non-blocking) - fires in background
             fetch("/api/sync", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ projectId: newProject.id })
             }).catch(e => console.error("Initial sync error", e));
+
+            setIsModalOpen(false);
+
+            // Redirect directly to the project insights page
+            router.push(`/projects/${newProject.id}`);
 
         } catch (err) {
             console.error("Failed to create project", err);
