@@ -48,44 +48,45 @@ export default function LandingPage() {
             {/* Hero Section */}
             <section className="pt-32 pb-20 px-6">
                 <div className="max-w-7xl mx-auto">
-                    <div className="text-center space-y-8 mb-20">
+                    <div className="text-center space-y-8 mb-20 relative px-4">
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 1 }}
+                            className="absolute inset-0 pointer-events-none -z-10"
+                        >
+                            {/* Floating 3D Icons Behind Text */}
+                            <motion.div
+                                animate={{ 
+                                    y: [0, -20, 0],
+                                    rotate: [0, 5, 0]
+                                }}
+                                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                                className="absolute top-[10%] left-[5%] md:left-[15%] w-32 h-32 md:w-64 md:h-64 opacity-20 blur-[2px]"
+                            >
+                                <Image src="/app-store-3d.png" alt="" width={256} height={256} className="w-full h-full object-contain" />
+                            </motion.div>
+                            <motion.div
+                                animate={{ 
+                                    y: [0, 20, 0],
+                                    rotate: [0, -5, 0]
+                                }}
+                                transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                                className="absolute top-[20%] right-[5%] md:right-[15%] w-32 h-32 md:w-64 md:h-64 opacity-20 blur-[2px]"
+                            >
+                                <Image src="/google-play-3d.png" alt="" width={256} height={256} className="w-full h-full object-contain" />
+                            </motion.div>
+                        </motion.div>
+
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5 }}
                         >
-                            <h1 className="text-5xl md:text-7xl font-black tracking-tight leading-[1.1] mb-6">
+                            <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-[1] mb-6 relative z-10">
                                 Stop Guessing. <br />
-                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-purple-500 to-blue-600">
+                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-purple-500/80 to-blue-600">
                                     Understand Every Review.
-                                </span>
-                                <span className="inline-flex items-center gap-4 ml-6 align-middle">
-                                    <motion.div
-                                        whileHover={{ scale: 1.1, rotate: -5 }}
-                                        className="relative group cursor-default"
-                                    >
-                                        <div className="absolute -inset-2 bg-blue-500/20 rounded-xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity" />
-                                        <Image 
-                                            src="/app-store-icon.svg" 
-                                            alt="App Store Icon" 
-                                            width={56} 
-                                            height={56} 
-                                            className="w-10 h-10 md:w-14 md:h-14 relative drop-shadow-2xl"
-                                        />
-                                    </motion.div>
-                                    <motion.div
-                                        whileHover={{ scale: 1.1, rotate: 5 }}
-                                        className="relative group cursor-default"
-                                    >
-                                        <div className="absolute -inset-2 bg-green-500/20 rounded-xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity" />
-                                        <Image 
-                                            src="/google-play-icon.svg" 
-                                            alt="Google Play Icon" 
-                                            width={56} 
-                                            height={56} 
-                                            className="w-10 h-10 md:w-14 md:h-14 relative drop-shadow-2xl"
-                                        />
-                                    </motion.div>
                                 </span>
                             </h1>
                         </motion.div>
@@ -94,7 +95,7 @@ export default function LandingPage() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5, delay: 0.1 }}
-                            className="text-center max-w-2xl mx-auto"
+                            className="text-center max-w-2xl mx-auto relative z-10"
                         >
                             <p className="text-xl text-muted-foreground leading-relaxed">
                                 ReviewInsight turns thousands of App Store and Google Play reviews into actionable product insights in seconds.
