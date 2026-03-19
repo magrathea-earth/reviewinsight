@@ -37,7 +37,7 @@ import {
 
 const globalItems = [
     { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-    { name: "Billing", href: "/billing", icon: CreditCard },
+    // { name: "Billing", href: "/billing", icon: CreditCard },
     { name: "Settings", href: "/settings", icon: Settings },
 ];
 
@@ -166,14 +166,14 @@ function SidebarContent({ onClose }: { onClose?: () => void }) {
                             </div>
                             <div className="flex flex-col flex-1 overflow-hidden">
                                 <span className="text-sm font-bold truncate">{userName}</span>
-                                <span className={cn(
+                                {/* <span className={cn(
                                     "text-[10px] uppercase font-black tracking-widest px-1.5 py-0.5 rounded-sm w-fit mt-0.5",
                                     plan === "PRO"
                                         ? "bg-primary text-primary-foreground"
                                         : "bg-muted-foreground/20 text-muted-foreground/80"
                                 )}>
                                     {plan === "PRO" ? "Pro Plan" : "Free Plan"}
-                                </span>
+                                </span> */}
                             </div>
                             <div className="text-muted-foreground">
                                 {plan === "PRO" ? <Sparkles className="w-4 h-4 text-primary" /> : <Settings className="w-4 h-4" />}
