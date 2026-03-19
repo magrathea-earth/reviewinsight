@@ -100,7 +100,7 @@ export default function LandingPage() {
                             className="text-center max-w-2xl mx-auto relative z-10"
                         >
                             <p className="text-xl text-muted-foreground leading-relaxed">
-                                ReviewInsight turns thousands of App Store and Google Play reviews into actionable product insights in seconds.
+                                ReviewInsight turns thousands of <span className="font-extrabold text-[#0071e3] dark:text-[#007aff]">App Store</span> and <span className="font-extrabold text-[#34a853] dark:text-[#34d399]">Play Store</span> reviews into actionable product insights in seconds.
                             </p>
                         </motion.div>
 
