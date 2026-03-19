@@ -306,23 +306,23 @@ export default function LandingPage() {
                     <div className="flex flex-wrap justify-center items-center gap-12 md:gap-24">
                         <div className="flex flex-col items-center gap-3 grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all cursor-default">
                             <Image 
-                                src="/app-store.svg" 
+                                src="/app-store-3d.png" 
                                 alt="App Store" 
-                                width={160} 
-                                height={48} 
-                                className="h-10 w-auto"
+                                width={80} 
+                                height={80} 
+                                className="w-16 h-16 md:w-20 md:h-20 drop-shadow-xl"
                             />
-                            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">App Store</span>
+                            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mt-2">App Store</span>
                         </div>
                         <div className="flex flex-col items-center gap-3 grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all cursor-default">
                             <Image 
-                                src="/google-play.svg" 
+                                src="/google-play-3d.png" 
                                 alt="Google Play Store" 
-                                width={180} 
-                                height={48} 
-                                className="h-10 w-auto"
+                                width={80} 
+                                height={80} 
+                                className="w-16 h-16 md:w-20 md:h-20 drop-shadow-xl"
                             />
-                            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Play Store</span>
+                            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mt-2">Play Store</span>
                         </div>
                     </div>
                 </div>
