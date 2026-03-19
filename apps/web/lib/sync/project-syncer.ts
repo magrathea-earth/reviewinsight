@@ -12,8 +12,8 @@ export class ProjectSyncer {
 
     constructor() {
         this.genAI = new GoogleGenerativeAI(process.env.GOOGLE_GENERATIVE_AI_API_KEY || "");
-        // Use gemini-1.5-flash for fastest stable analysis
-        const model = "gemini-1.5-flash";
+        // User requested Gemini 2.5 Flash
+        const model = "gemini-2.5-flash";
         this.model = this.genAI.getGenerativeModel({ model });
     }
 
