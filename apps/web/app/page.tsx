@@ -60,6 +60,8 @@ export default function LandingPage() {
                                     Understand Every Review.
                                 </span>
                             </h1>
+                        </motion.div>
+
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
