@@ -60,16 +60,45 @@ export default function LandingPage() {
                                     Understand Every Review.
                                 </span>
                             </h1>
-                            <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-                                ReviewInsight turns thousands of App Store and Google Play reviews into actionable product insights in seconds.
-                            </p>
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5, delay: 0.1 }}
+                            className="flex flex-col items-center gap-6"
+                        >
+                            <div className="flex flex-wrap justify-center items-center gap-4 md:gap-8 px-6 py-3 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm">
+                                <span className="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground/60 w-full md:w-auto text-center md:text-left">Analyzing reviews from</span>
+                                <div className="flex items-center gap-6">
+                                    <div className="relative group">
+                                        <div className="absolute -inset-2 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
+                                        <Image 
+                                            src="/app-store.svg" 
+                                            alt="App Store" 
+                                            width={140} 
+                                            height={42} 
+                                            className="h-9 w-auto relative grayscale group-hover:grayscale-0 transition-all duration-500"
+                                        />
+                                    </div>
+                                    <div className="w-px h-6 bg-white/10 hidden md:block" />
+                                    <div className="relative group">
+                                        <div className="absolute -inset-2 bg-gradient-to-r from-green-500/20 to-blue-500/20 rounded-xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
+                                        <Image 
+                                            src="/google-play.svg" 
+                                            alt="Google Play Store" 
+                                            width={160} 
+                                            height={42} 
+                                            className="h-9 w-auto relative grayscale group-hover:grayscale-0 transition-all duration-500"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
                         </motion.div>
 
                         <motion.div
                             initial={{ opacity: 0, scale: 0.95 }}
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{ duration: 0.5, delay: 0.2 }}
-                            className="flex items-center justify-center"
+                            className="flex items-center justify-center pt-4"
                         >
                             <Link
                                 href="/auth/signin"
@@ -260,17 +289,31 @@ export default function LandingPage() {
                 </div>
             </section>
 
-            {/* Social Proof Placeholder */}
-            <section className="py-20 border-y border-muted/30">
+            {/* Sources Section */}
+            <section className="py-20 border-y border-muted/30 bg-secondary/20">
                 <div className="max-w-7xl mx-auto px-6">
-                    <p className="text-center text-sm font-bold uppercase tracking-widest text-muted-foreground mb-12">Trusted by fast-growing product teams</p>
-                    <div className="flex flex-wrap justify-center items-center gap-12 md:gap-20 opacity-40 grayscale">
-                        {/* Placeholders for logos */}
-                        <div className="text-2xl font-black italic">TECHWAVE</div>
-                        <div className="text-2xl font-black italic">APPFLOW</div>
-                        <div className="text-2xl font-black italic">DATACORE</div>
-                        <div className="text-2xl font-black italic">SMARTLOGIQ</div>
-                        <div className="text-2xl font-black italic">NEXTGEN</div>
+                    <p className="text-center text-xs font-black uppercase tracking-[0.3em] text-muted-foreground/60 mb-12">Native Platform Integrations</p>
+                    <div className="flex flex-wrap justify-center items-center gap-12 md:gap-24">
+                        <div className="flex flex-col items-center gap-3 grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all cursor-default">
+                            <Image 
+                                src="/app-store.svg" 
+                                alt="App Store" 
+                                width={160} 
+                                height={48} 
+                                className="h-10 w-auto"
+                            />
+                            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">App Store</span>
+                        </div>
+                        <div className="flex flex-col items-center gap-3 grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all cursor-default">
+                            <Image 
+                                src="/google-play.svg" 
+                                alt="Google Play Store" 
+                                width={180} 
+                                height={48} 
+                                className="h-10 w-auto"
+                            />
+                            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Play Store</span>
+                        </div>
                     </div>
                 </div>
             </section>
