@@ -130,54 +130,26 @@ export class ProjectSyncer {
             console.log(`[ProjectSyncer] Adapter returned:`, result ? `${result.items?.length || 0} items, ${result.errors?.length || 0} errors` : 'null/undefined');
 
             if (result && result.items.length > 0) {
-                console.log(`[ProjectSyncer] Saving ${result.items.length} items for source ${source.id}`);
+                console.log(`[ProjectSyncer] Processing ${result.items.length} items for source ${source.id}`);
 
-                for (const item of result.items) {
-                    try {
-                        // Validate required fields
-                        if (!item.externalId) {
-                            console.warn(`[ProjectSyncer] Skipping item without externalId:`, item.text?.substring(0, 50));
-                            continue;
-                        }
+                // Filter out invalid items first
+                const validItems = result.items.filter(item => item.externalId && item.text).map(item => ({
+                    ...item,
+                    projectId,
+                    platform: source.platform,
+                    text: item.text!,
+                    fetchedAt: new Date()
+                }));
 
-                        if (!item.text) {
-                            console.warn(`[ProjectSyncer] Skipping item without text:`, item.externalId);
-                            continue;
-                        }
-
-                        console.log(`[ProjectSyncer] Upserting item: ${item.externalId?.substring(0, 50)}...`);
-
-                        await prisma.reviewItem.upsert({
-                            where: {
-                                platform_externalId_projectId: {
-                                    platform: source.platform,
-                                    externalId: item.externalId!,
-                                    projectId: projectId,
-                                },
-                            },
-                            create: {
-                                ...item,
-                                projectId,
-                                platform: source.platform,
-                                text: item.text!,
-                            } as any,
-                            update: {
-                                ...item,
-                                text: item.text!,
-                            } as any,
-                        });
-
-                        console.log(`[ProjectSyncer] ✅ Saved item: ${item.externalId?.substring(0, 50)}...`);
-                    } catch (itemError: any) {
-                        console.error(`[ProjectSyncer] ❌ Failed to save item:`, {
-                            externalId: item.externalId,
-                            error: itemError.message,
-                            stack: itemError.stack
-                        });
-                    }
+                if (validItems.length > 0) {
+                    console.log(`[ProjectSyncer] Bulk inserting ${validItems.length} items...`);
+                    // Skip duplicates is supported on PostgreSQL
+                    await prisma.reviewItem.createMany({
+                        data: validItems as any,
+                        skipDuplicates: true
+                    });
+                    console.log(`[ProjectSyncer] ✅ Bulk insert completed for ${source.id}`);
                 }
-
-                console.log(`[ProjectSyncer] Finished processing ${result.items.length} items`);
             } else {
                 console.log(`[ProjectSyncer] No items returned from adapter for source ${source.id}`);
             }
@@ -199,29 +171,30 @@ export class ProjectSyncer {
     private async analyzeProject(projectId: string) {
         console.log(`[ProjectSyncer] Starting analysis for project ${projectId}`);
 
-        const poorItems = await prisma.reviewItem.findMany({
-            where: {
-                projectId,
-                OR: [
-                    { rating: { lte: 3 } },
-                    { sentiment: "NEG" },
-                ],
-            },
-            take: 100,
-            orderBy: { createdAt: "desc" },
-        });
-
-        const goodItems = await prisma.reviewItem.findMany({
-            where: {
-                projectId,
-                OR: [
-                    { rating: { gte: 4 } },
-                    { sentiment: "POS" },
-                ],
-            },
-            take: 100,
-            orderBy: { createdAt: "desc" },
-        });
+        const [poorItems, goodItems] = await Promise.all([
+            prisma.reviewItem.findMany({
+                where: {
+                    projectId,
+                    OR: [
+                        { rating: { lte: 3 } },
+                        { sentiment: "NEG" },
+                    ],
+                },
+                take: 100,
+                orderBy: { createdAt: "desc" },
+            }),
+            prisma.reviewItem.findMany({
+                where: {
+                    projectId,
+                    OR: [
+                        { rating: { gte: 4 } },
+                        { sentiment: "POS" },
+                    ],
+                },
+                take: 100,
+                orderBy: { createdAt: "desc" },
+            })
+        ]);
 
         console.log(`[ProjectSyncer] Found ${poorItems.length} poor items and ${goodItems.length} good items for project ${projectId}`);
 
