@@ -63,7 +63,7 @@ export default function LandingPage() {
                                     scale: [1, 1.05, 1]
                                 }}
                                 transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-                                className="absolute top-[-15%] left-[-5%] md:left-[0%] w-56 h-56 md:w-[35rem] md:h-[35rem] opacity-100 mix-blend-multiply filter drop-shadow-2xl"
+                                className="absolute top-[-15%] left-[-5%] md:left-[0%] w-56 h-56 md:w-[35rem] md:h-[35rem] opacity-100 mix-blend-multiply blur-0 filter drop-shadow-2xl contrast-125 brightness-110"
                             >
                                 <Image src="/app-store-3d.png" alt="" width={512} height={512} className="w-full h-full object-contain" priority />
                             </motion.div>
@@ -74,7 +74,7 @@ export default function LandingPage() {
                                     scale: [1, 1.1, 1]
                                 }}
                                 transition={{ duration: 9, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                                className="absolute top-[5%] right-[-5%] md:right-[0%] w-56 h-56 md:w-[35rem] md:h-[35rem] opacity-100 mix-blend-multiply filter drop-shadow-2xl"
+                                className="absolute top-[5%] right-[-5%] md:right-[0%] w-56 h-56 md:w-[35rem] md:h-[35rem] opacity-100 mix-blend-multiply blur-0 filter drop-shadow-2xl contrast-125 brightness-110"
                             >
                                 <Image src="/google-play-3d.png" alt="" width={512} height={512} className="w-full h-full object-contain" priority />
                             </motion.div>
