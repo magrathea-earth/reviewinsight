@@ -12,82 +12,64 @@ export class ProjectSyncer {
 
     constructor() {
         this.genAI = new GoogleGenerativeAI(process.env.GOOGLE_GENERATIVE_AI_API_KEY || "");
-        // Override with GEMINI_MODEL in .env (e.g. GEMINI_MODEL=gemini-2.5-flash)
-        const model = process.env.GEMINI_MODEL || "gemini-2.5-flash";
+        // Use gemini-1.5-flash for fastest stable analysis
+        const model = "gemini-1.5-flash";
         this.model = this.genAI.getGenerativeModel({ model });
     }
 
-    static async sync(projectId: string) {
+    static async fullSync(projectId: string) {
         const syncer = new ProjectSyncer();
         await syncer.run(projectId);
     }
 
-    async run(projectId: string) {
-        console.log(`[ProjectSyncer] Starting sync request for project ${projectId}`);
+    static async ingestOnly(projectId: string) {
+        const syncer = new ProjectSyncer();
+        await syncer.run(projectId, true);
+    }
 
-        // 1. Atomic Lock Attempt: Try to set syncInProgress=true ONLY if currently false
+    static async analyzeOnly(projectId: string) {
+        const syncer = new ProjectSyncer();
+        await syncer.analyzeProject(projectId);
+    }
+
+    async run(projectId: string, ingestionOnly = false) {
+        console.log(`[ProjectSyncer] Starting sync requested (ingestionOnly: ${ingestionOnly}) for project ${projectId}`);
+
+        // 1. Atomic Lock Attempt
         const lockResult = await prisma.project.updateMany({
-            where: {
-                id: projectId,
-                syncInProgress: false
-            },
-            data: {
-                syncInProgress: true,
-                syncStartedAt: new Date()
-            }
+            where: { id: projectId, syncInProgress: false },
+            data: { syncInProgress: true, syncStartedAt: new Date() }
         });
 
-        // 2. Handle Lock Failure (Already in progress?)
         if (lockResult.count === 0) {
-            // Fetch to check if it's stale or just busy
-            const projectCheck = await prisma.project.findUnique({
-                where: { id: projectId }
-            });
-
-            if (!projectCheck) throw new Error("Project not found");
-
-            const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
-
-            // If stale (started > 5 mins ago), override it
-            if (projectCheck.syncInProgress && projectCheck.syncStartedAt && projectCheck.syncStartedAt < fiveMinutesAgo) {
-                console.warn(`[ProjectSyncer] Found stale lock for project ${projectId}. Overriding.`);
-                await prisma.project.update({
-                    where: { id: projectId },
-                    data: { syncInProgress: true, syncStartedAt: new Date() }
-                });
-            } else {
-                console.warn(`[ProjectSyncer] Sync already in progress for project ${projectId}. rejecting.`);
-                return;
-            }
-        }
-
-        // 3. Lock Acquired! Now fetch data needed for sync
-        const project = await prisma.project.findUnique({
-            where: { id: projectId },
-            include: { sources: true },
-        });
-
-        if (!project) {
-            // Should theoretically not happen if updateMany succeeded, but safety first
-            await prisma.project.update({ where: { id: projectId }, data: { syncInProgress: false } });
-            throw new Error("Project not found after acquiring lock");
+            console.warn(`[ProjectSyncer] Sync already in progress for project ${projectId}.`);
+            return;
         }
 
         try {
+            const project = await prisma.project.findUnique({
+                where: { id: projectId },
+                include: { sources: true },
+            });
+
+            if (!project) throw new Error("Project not found");
+
             // 4. Ingest Data (Parallel)
             await Promise.all(
                 project.sources.map(source => this.ingestSource(source, projectId))
             );
 
-            // 5. Run Analysis
-            await this.analyzeProject(projectId);
+            if (!ingestionOnly) {
+                // 5. Run Analysis
+                await this.analyzeProject(projectId);
+            }
         } finally {
             // 6. Release Lock
             await prisma.project.update({
                 where: { id: projectId },
                 data: { syncInProgress: false }
             });
-            console.log(`[ProjectSyncer] Sync lock released for project ${projectId}`);
+            console.log(`[ProjectSyncer] Sync complete (ingestionOnly: ${ingestionOnly}) for project ${projectId}`);
         }
     }
 

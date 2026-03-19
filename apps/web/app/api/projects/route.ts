@@ -93,14 +93,21 @@ export async function POST(req: NextRequest) {
     });
     console.log("Project created successfully:", project.id);
 
-    console.log(`[API] Triggering initial sync for project ${project.id}...`);
+    console.log(`[API] Triggering rapid ingestion for project ${project.id}...`);
     try {
         const { ProjectSyncer } = await import("../../../lib/sync/project-syncer");
-        await ProjectSyncer.sync(project.id);
-        console.log(`[API] Initial sync completed for ${project.id}`);
+        
+        // 1. Await ONLY ingestion (fast)
+        await ProjectSyncer.ingestOnly(project.id);
+        console.log(`[API] Rapid ingestion completed for ${project.id}`);
+
+        // 2. Background the full sync (includes analysis)
+        ProjectSyncer.fullSync(project.id).catch(err => 
+            console.error(`[API] Background full sync failed for ${project.id}:`, err)
+        );
+        
     } catch (syncErr) {
-        console.error(`[API] Initial sync failed for ${project.id}:`, syncErr);
-        // We still return the project even if sync failed, so the page can load
+        console.error(`[API] Initial sync phase failed for ${project.id}:`, syncErr);
     }
 
     return NextResponse.json(project);
