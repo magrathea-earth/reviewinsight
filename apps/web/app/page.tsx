@@ -59,6 +59,34 @@ export default function LandingPage() {
                                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-purple-500 to-blue-600">
                                     Understand Every Review.
                                 </span>
+                                <span className="inline-flex items-center gap-4 ml-6 align-middle">
+                                    <motion.div
+                                        whileHover={{ scale: 1.1, rotate: -5 }}
+                                        className="relative group cursor-default"
+                                    >
+                                        <div className="absolute -inset-2 bg-blue-500/20 rounded-xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity" />
+                                        <Image 
+                                            src="/app-store-icon.svg" 
+                                            alt="App Store Icon" 
+                                            width={56} 
+                                            height={56} 
+                                            className="w-10 h-10 md:w-14 md:h-14 relative drop-shadow-2xl"
+                                        />
+                                    </motion.div>
+                                    <motion.div
+                                        whileHover={{ scale: 1.1, rotate: 5 }}
+                                        className="relative group cursor-default"
+                                    >
+                                        <div className="absolute -inset-2 bg-green-500/20 rounded-xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity" />
+                                        <Image 
+                                            src="/google-play-icon.svg" 
+                                            alt="Google Play Icon" 
+                                            width={56} 
+                                            height={56} 
+                                            className="w-10 h-10 md:w-14 md:h-14 relative drop-shadow-2xl"
+                                        />
+                                    </motion.div>
+                                </span>
                             </h1>
                         </motion.div>
 
@@ -66,34 +94,11 @@ export default function LandingPage() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5, delay: 0.1 }}
-                            className="flex flex-col items-center gap-6"
+                            className="text-center max-w-2xl mx-auto"
                         >
-                            <div className="flex flex-wrap justify-center items-center gap-4 md:gap-8 px-6 py-3 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm">
-                                <span className="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground/60 w-full md:w-auto text-center md:text-left">Analyzing reviews from</span>
-                                <div className="flex items-center gap-6">
-                                    <div className="relative group">
-                                        <div className="absolute -inset-2 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
-                                        <Image 
-                                            src="/app-store.svg" 
-                                            alt="App Store" 
-                                            width={140} 
-                                            height={42} 
-                                            className="h-9 w-auto relative grayscale group-hover:grayscale-0 transition-all duration-500"
-                                        />
-                                    </div>
-                                    <div className="w-px h-6 bg-white/10 hidden md:block" />
-                                    <div className="relative group">
-                                        <div className="absolute -inset-2 bg-gradient-to-r from-green-500/20 to-blue-500/20 rounded-xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
-                                        <Image 
-                                            src="/google-play.svg" 
-                                            alt="Google Play Store" 
-                                            width={160} 
-                                            height={42} 
-                                            className="h-9 w-auto relative grayscale group-hover:grayscale-0 transition-all duration-500"
-                                        />
-                                    </div>
-                                </div>
-                            </div>
+                            <p className="text-xl text-muted-foreground leading-relaxed">
+                                ReviewInsight turns thousands of App Store and Google Play reviews into actionable product insights in seconds.
+                            </p>
                         </motion.div>
 
                         <motion.div
