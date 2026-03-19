@@ -8,7 +8,7 @@ import { AuthProvider } from "@/components/auth-provider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-    title: "ReviewInsight AI | Stop Guessing, Start Growing with AI Analysis",
+    title: "ReviewsInsight AI | Stop Guessing, Start Growing with AI Analysis",
     description: "The ultimate AI-powered review analysis tool. Connect App Store, Play Store, Instagram, and X to transform customer feedback into actionable product strategy in seconds.",
     keywords: ["AI review analysis", "customer feedback", "sentiment analysis", "app store reviews", "product insights", "competitor benchmarking"],
 };

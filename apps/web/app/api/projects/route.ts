@@ -93,14 +93,15 @@ export async function POST(req: NextRequest) {
     });
     console.log("Project created successfully:", project.id);
 
-    // Fire and forget sync (smart sync will handle the "Initial Deep Pull")
-    // We don't await this so the UI returns immediately.
-    import("../../../lib/sync/project-syncer").then(({ ProjectSyncer }) => {
-        console.log(`[API] Triggering auto-sync for new project ${project.id}`);
-        ProjectSyncer.sync(project.id).catch(err =>
-            console.error(`[API] Auto-sync failed for ${project.id}:`, err)
-        );
-    });
+    console.log(`[API] Triggering initial sync for project ${project.id}...`);
+    try {
+        const { ProjectSyncer } = await import("../../../lib/sync/project-syncer");
+        await ProjectSyncer.sync(project.id);
+        console.log(`[API] Initial sync completed for ${project.id}`);
+    } catch (syncErr) {
+        console.error(`[API] Initial sync failed for ${project.id}:`, syncErr);
+        // We still return the project even if sync failed, so the page can load
+    }
 
     return NextResponse.json(project);
 }

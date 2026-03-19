@@ -85,8 +85,8 @@ function SidebarContent({ onClose }: { onClose?: () => void }) {
         <div className="flex flex-col h-full">
             <div className="p-6">
                 <Link href="/dashboard" onClick={onClose} className="flex items-center gap-2 font-bold text-xl tracking-tight hover:opacity-80 transition-opacity">
-                    <img src="/logo.png" alt="ReviewInsight" className="w-8 h-8 object-contain" />
-                    <span>ReviewInsight</span>
+                    <img src="/logo.png" alt="ReviewsInsight" className="w-8 h-8 object-contain" />
+                    <span>ReviewsInsight</span>
                 </Link>
             </div>
 

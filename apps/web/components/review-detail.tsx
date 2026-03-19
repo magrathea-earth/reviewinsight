@@ -121,7 +121,7 @@ export function ReviewDetail({ review, onClose }: ReviewDetailProps) {
                             <footer className="pt-12 border-t mt-12 text-center">
                                 <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
                                     <MessageSquare className="w-3 h-3" />
-                                    Indexed by ReviewInsight AI v2.4
+                                    Indexed by ReviewsInsight AI v2.4
                                 </div>
                             </footer>
                         </div>

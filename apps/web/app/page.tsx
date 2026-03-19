@@ -26,8 +26,8 @@ export default function LandingPage() {
             <nav className="fixed top-0 w-full z-50 glass border-b">
                 <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                        <Image src="/logo.png" alt="ReviewInsight Logo" width={32} height={32} className="w-8 h-8 rounded-lg" />
-                        <span className="text-xl font-bold tracking-tight">ReviewInsight</span>
+                        <Image src="/logo.png" alt="ReviewsInsight Logo" width={32} height={32} className="w-8 h-8 rounded-lg" />
+                        <span className="text-xl font-bold tracking-tight">ReviewsInsight</span>
                     </div>
                     <div className="hidden md:flex items-center gap-8 text-sm font-medium text-muted-foreground">
                         <Link href="#problem" className="hover:text-foreground transition-colors">Problem</Link>
@@ -100,7 +100,7 @@ export default function LandingPage() {
                             className="text-center max-w-2xl mx-auto relative z-10"
                         >
                             <p className="text-xl text-muted-foreground leading-relaxed">
-                                ReviewInsight turns thousands of <span className="font-extrabold text-[#0071e3] dark:text-[#007aff]">App Store</span> and <span className="font-extrabold text-[#34a853] dark:text-[#34d399]">Play Store</span> reviews into actionable product insights in seconds.
+                                ReviewsInsight turns thousands of <span className="font-extrabold text-[#0071e3] dark:text-[#007aff]">App Store</span> and <span className="font-extrabold text-[#34a853] dark:text-[#34d399]">Play Store</span> reviews into actionable product insights in seconds.
                             </p>
                         </motion.div>
 
@@ -129,7 +129,7 @@ export default function LandingPage() {
                         <div className="rounded-[2.5rem] border bg-card p-4 shadow-2xl overflow-hidden">
                             <Image
                                 src="/hero.svg"
-                                alt="ReviewInsight Dashboard Preview"
+                                alt="ReviewsInsight Dashboard Preview"
                                 width={1200}
                                 height={800}
                                 className="rounded-[1.5rem] w-full h-auto"
@@ -185,7 +185,7 @@ export default function LandingPage() {
                                 <span className="text-primary">into Action.</span>
                             </h2>
                             <p className="text-lg text-muted-foreground mb-12 leading-relaxed">
-                                ReviewInsight uses advanced AI models to read every single word across all platforms. It doesn't just read—it understands, categorizes, and prioritizes.
+                                ReviewsInsight uses advanced AI models to read every single word across all platforms. It doesn't just read—it understands, categorizes, and prioritizes.
                             </p>
 
                             <div className="space-y-6">
@@ -211,7 +211,7 @@ export default function LandingPage() {
                             <div className="absolute inset-0 bg-primary/10 blur-3xl -z-10 rounded-full" />
                             <div className="p-8 rounded-[2rem] border bg-card/80 backdrop-blur-xl shadow-xl">
                                 <div className="flex items-center justify-between mb-8 border-b pb-4">
-                                    <span className="font-bold">Manual vs ReviewInsight</span>
+                                    <span className="font-bold">Manual vs ReviewsInsight</span>
                                     <div className="flex gap-2">
                                         <div className="w-3 h-3 rounded-full bg-red-400" />
                                         <div className="w-3 h-3 rounded-full bg-yellow-400" />
@@ -338,7 +338,7 @@ export default function LandingPage() {
                         Ready to hear what your <br className="hidden md:block" /> customers are actually saying?
                     </h2>
                     <p className="text-primary-foreground/80 text-lg mb-12 max-w-xl mx-auto italic">
-                        "ReviewInsight saved our product team 40 hours a week and helped us increase our app rating from 3.2 to 4.7 stars in just 3 months."
+                        "ReviewsInsight saved our product team 40 hours a week and helped us increase our app rating from 3.2 to 4.7 stars in just 3 months."
                     </p>
                     <Link
                         href="/auth/signin"
@@ -354,8 +354,8 @@ export default function LandingPage() {
                 <div className="max-w-7xl mx-auto px-6">
                     <div className="flex flex-col md:flex-row justify-between items-center gap-12">
                         <div className="flex items-center gap-2">
-                            <Image src="/logo.png" alt="ReviewInsight Logo" width={32} height={32} className="w-8 h-8 rounded-lg" />
-                            <span className="text-xl font-bold tracking-tight">ReviewInsight</span>
+                            <Image src="/logo.png" alt="ReviewsInsight Logo" width={32} height={32} className="w-8 h-8 rounded-lg" />
+                            <span className="text-xl font-bold tracking-tight">ReviewsInsight</span>
                         </div>
                         <div className="flex gap-12 text-sm font-medium text-muted-foreground">
                             <Link href="#" className="hover:text-foreground">Privacy</Link>
@@ -363,7 +363,7 @@ export default function LandingPage() {
                             <Link href="#" className="hover:text-foreground">Twitter</Link>
                             <Link href="#" className="hover:text-foreground">Support</Link>
                         </div>
-                        <p className="text-sm text-muted-foreground">© 2026 ReviewInsight. All rights reserved.</p>
+                        <p className="text-sm text-muted-foreground">© 2026 ReviewsInsight. All rights reserved.</p>
                     </div>
                 </div>
             </footer>

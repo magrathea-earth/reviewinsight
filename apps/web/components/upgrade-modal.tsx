@@ -29,7 +29,7 @@ export function UpgradeModal({ isOpen, onClose, title, description }: UpgradeMod
                         {title || "Upgrade to Pro"}
                     </DialogTitle>
                     <DialogDescription>
-                        {description || "You've reached the limits of the Free plan. Upgrade to unlock the full power of ReviewInsight AI."}
+                        {description || "You've reached the limits of the Free plan. Upgrade to unlock the full power of ReviewsInsight AI."}
                     </DialogDescription>
                 </DialogHeader>
 

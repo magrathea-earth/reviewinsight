@@ -74,10 +74,10 @@ export class ProjectSyncer {
         }
 
         try {
-            // 4. Ingest Data
-            for (const source of project.sources) {
-                await this.ingestSource(source, projectId);
-            }
+            // 4. Ingest Data (Parallel)
+            await Promise.all(
+                project.sources.map(source => this.ingestSource(source, projectId))
+            );
 
             // 5. Run Analysis
             await this.analyzeProject(projectId);
@@ -97,9 +97,6 @@ export class ProjectSyncer {
                 where: { id: source.id },
                 data: { status: "SYNCING" },
             });
-
-            // Artificial "Human-Feel" Delay (1 second)
-            await new Promise(resolve => setTimeout(resolve, 1000));
 
             // Only require API keys for platforms that use them (each adapter validates its own key)
             // Determine sync window (Smart Sync)

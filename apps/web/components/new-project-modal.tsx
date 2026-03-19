@@ -137,7 +137,7 @@ export function NewProjectModal({ isOpen, onClose, onCreate }: NewProjectModalPr
                                             </div>
                                             <h3 className="text-lg font-bold">Connect your platform</h3>
                                             <p className="text-sm text-muted-foreground max-w-[300px] mx-auto">
-                                                Enter the account handle or profile URL you want ReviewInsight to monitor.
+                                                Enter the account handle or profile URL you want ReviewsInsight to monitor.
                                             </p>
                                         </div>
 
