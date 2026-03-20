@@ -93,14 +93,22 @@ export async function POST(req: NextRequest) {
     });
     console.log("Project created successfully:", project.id);
 
-    // Fire and forget deep sync (ingestion + analysis)
-    // This allows the user to land on the /projects/[id] page INSTANTLY while data loads in the background
-    import("../../../lib/sync/project-syncer").then(({ ProjectSyncer }) => {
-        console.log(`[API] Triggering background sync for project ${project.id}...`);
-        ProjectSyncer.fullSync(project.id).catch(err => 
-            console.error(`[API] Background sync failed for ${project.id}:`, err)
+    // Phase 1: AWAIT ingestion so reviews are ready when user lands on dashboard
+    // Phase 2: AI analysis (slow) runs in background after redirect
+    try {
+        const { ProjectSyncer } = await import("../../../lib/sync/project-syncer");
+        console.log(`[API] Awaiting review ingestion for project ${project.id}...`);
+        await ProjectSyncer.ingestOnly(project.id);
+        console.log(`[API] Ingestion done. Starting background AI analysis...`);
+
+        // Kick off AI analysis in the background (non-blocking)
+        ProjectSyncer.analyzeOnly(project.id).catch(err =>
+            console.error(`[API] Background analysis failed for ${project.id}:`, err)
         );
-    });
+    } catch (syncErr) {
+        console.error(`[API] Ingestion failed for ${project.id}:`, syncErr);
+        // Still return the project even if sync failed
+    }
 
     return NextResponse.json(project);
 }
