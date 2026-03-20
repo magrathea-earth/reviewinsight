@@ -114,18 +114,28 @@ export class ProjectSyncer {
             if (result && result.items.length > 0) {
                 console.log(`[ProjectSyncer] Processing ${result.items.length} items for source ${source.id}`);
 
-                // Filter out invalid items first
-                const validItems = result.items.filter(item => item.externalId && item.text).map(item => ({
-                    ...item,
-                    projectId,
-                    platform: source.platform,
-                    text: item.text!,
-                    fetchedAt: new Date()
-                }));
+                // STRICT 30-DAY HARD CAP: Drop any review older than 30 days
+                const cutoff = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+
+                const validItems = result.items
+                    .filter(item => item.externalId && item.text)
+                    .filter(item => {
+                        if (!item.createdAt) return false; // drop if no date at all
+                        return new Date(item.createdAt) >= cutoff;
+                    })
+                    .map(item => ({
+                        ...item,
+                        projectId,
+                        platform: source.platform,
+                        text: item.text!,
+                        fetchedAt: new Date()
+                    }));
+
+                const dropped = result.items.length - validItems.length;
+                console.log(`[ProjectSyncer] ${validItems.length} items within 30-day window, ${dropped} dropped (too old or no date)`);
 
                 if (validItems.length > 0) {
                     console.log(`[ProjectSyncer] Bulk inserting ${validItems.length} items...`);
-                    // Skip duplicates is supported on PostgreSQL
                     await prisma.reviewItem.createMany({
                         data: validItems as any,
                         skipDuplicates: true
