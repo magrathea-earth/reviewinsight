@@ -74,7 +74,7 @@ function SidebarContent({ onClose }: { onClose?: () => void }) {
 
     const projectItems = [
         { name: "Overview", href: `/projects/${projectId}`, icon: LayoutDashboard, exact: true },
-        { name: "AI Insights", href: `/projects/${projectId}/insights`, icon: ShieldAlert },
+        { name: "Insights", href: `/projects/${projectId}/insights`, icon: ShieldAlert },
         { name: "Positive Stories", href: `/projects/${projectId}/positive`, icon: Sparkles },
     ];
 
