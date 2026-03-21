@@ -195,25 +195,52 @@ export class ProjectSyncer {
             return;
         }
 
-        const prompt = `Analyze customer feedback for a project.
-        
-        CRITICAL FEEDBACK (Complaints):
-        ${poorItems.map(i => `- ${i.text}`).join("\n")}
-        
-        POSITIVE FEEDBACK (Highlights):
-        ${goodItems.map(i => `- ${i.text}`).join("\n")}
-        
-        Provide:
-        1. A general sentiment score (1-100).
-        2. "criticisms": { summary: "1-sentence", bullets: [{title, details, count, examples: [string]}], suggestions: ["Short, actionable title like 'Fix Auth Flow'", "Suggestions should be specific"] }
-        3. "praises": { summary: "1-sentence", bullets: [{title, details, count, examples: [string]}] }
-        
-        Return ONLY a JSON object with this structure:
-        {
-          "score": 85,
-          "criticisms": { "summary": "...", "bullets": [...], "suggestions": ["...", "...", "..."] },
-          "praises": { "summary": "...", "bullets": [...] }
-        }`;
+        const prompt = `You are helping a product team understand what their users are saying in plain, simple English.
+
+COMPLAINTS (what users are unhappy about):
+${poorItems.map(i => `- ${i.text}`).join("\n")}
+
+PRAISE (what users love):
+${goodItems.map(i => `- ${i.text}`).join("\n")}
+
+Your job: Summarize this feedback so a non-technical founder can instantly read and understand it. Rules:
+- Use simple, everyday words. No jargon.
+- Summaries must be 1-2 short sentences max.
+- Bullet titles must be 3-5 words, like a news headline.
+- Bullet details must explain the problem in plain English, as if talking to a friend.
+- Suggestions must be one clear action sentence starting with a verb, like "Add a way to..." or "Fix the issue where..."
+- Count must be the rough number of users mentioning that theme.
+
+Return ONLY a JSON object:
+{
+  "score": 85,
+  "criticisms": {
+    "summary": "Short 1-2 sentence summary of the main complaints in plain English.",
+    "bullets": [
+      {
+        "title": "Short Theme Title",
+        "details": "Plain English explanation of what users are complaining about and why it matters.",
+        "count": 12,
+        "examples": ["exact quote from a review", "another quote"]
+      }
+    ],
+    "suggestions": [
+      "Fix the login screen so users don't get logged out unexpectedly.",
+      "Add a way to recover a deleted item."
+    ]
+  },
+  "praises": {
+    "summary": "Short 1-2 sentence summary of what users love, in plain English.",
+    "bullets": [
+      {
+        "title": "Short Praise Title",
+        "details": "Plain English description of what users are happy about.",
+        "count": 20,
+        "examples": ["exact quote from a review"]
+      }
+    ]
+  }
+}`;
 
         try {
             console.log(`[ProjectSyncer] Sending analysis request to Gemini model...`);

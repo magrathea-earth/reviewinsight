@@ -49,13 +49,13 @@ export default function ProjectInsightsPage({ params }: { params: { id: string }
             <main className="flex-1 overflow-y-auto px-4 py-8 md:px-10 md:py-12">
                 <header className="mb-8 md:mb-10">
                     <div className="text-xs font-bold text-primary uppercase tracking-widest mb-1">{project.name}</div>
-                    <h1 className="text-2xl md:text-4xl font-bold tracking-tight mb-4">AI Insights</h1>
+                    <h1 className="text-2xl md:text-4xl font-bold tracking-tight mb-4">Insights</h1>
                     <div className="bg-primary/5 border border-primary/20 rounded-2xl p-5 md:p-6 relative overflow-hidden">
                         <div className="absolute top-0 right-0 p-6 opacity-10 hidden sm:block">
                             <Sparkles className="w-12 h-12 text-primary" />
                         </div>
                         <h2 className="text-xs font-bold uppercase tracking-wider text-primary mb-3 flex items-center gap-2">
-                            <Zap className="w-3.5 h-3.5" /> AI Executive Summary
+                            <Zap className="w-3.5 h-3.5" /> Summary
                         </h2>
                         <p className="text-base md:text-xl font-medium leading-relaxed text-foreground max-w-3xl text-pretty">
                             {criticisms.summary}
@@ -96,7 +96,7 @@ export default function ProjectInsightsPage({ params }: { params: { id: string }
                 <section className="space-y-8 max-w-5xl">
                     <div className="flex items-center gap-2 mb-6">
                         <Sparkles className="w-5 h-5 text-primary" />
-                        <h2 className="text-xl font-bold tracking-tight">Identified Themes</h2>
+                        <h2 className="text-xl font-bold tracking-tight">What users are saying</h2>
                     </div>
 
                     {bullets.length > 0 ? (
@@ -118,7 +118,7 @@ export default function ProjectInsightsPage({ params }: { params: { id: string }
                     <div className="pt-12 mt-12 border-t">
                         <div className="flex items-center gap-2 mb-8">
                             <Lightbulb className="w-5 h-5 text-yellow-500" />
-                            <h2 className="text-xl font-bold tracking-tight">Top AI Suggestions for You</h2>
+                            <h2 className="text-xl font-bold tracking-tight">What to fix next</h2>
                         </div>
 
                         {suggestions.length > 0 ? (
